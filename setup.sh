@@ -70,16 +70,6 @@ else
     claude plugin install anthropics/ralph-wiggum 2>/dev/null && log "Ralph Loop 安装完成" || warn "请手动运行: /plugin install anthropics/ralph-wiggum"
 fi
 
-# ---- 5. Goal Workflow (npx skills) ----
-echo ""
-echo "--- Goal Workflow (端到端闭环) ---"
-if claude skill list 2>/dev/null | grep -q "goal-workflow"; then
-    log "Goal Workflow 已安装"
-else
-    warn "正在安装 Goal Workflow..."
-    npx skills add smallnest/goal-workflow 2>/dev/null && log "Goal Workflow 安装完成" || warn "请手动运行: npx skills add smallnest/goal-workflow"
-fi
-
 # ---- 完成 ----
 echo ""
 echo "=============================================="
@@ -91,7 +81,9 @@ echo "  OpenSpec          — 规格驱动研究设计"
 echo "  GPT Researcher    — 自主深度搜索"
 echo "  Academic Research Skills — 学术质量门禁"
 echo "  Ralph Loop        — 自主迭代引擎"
-echo "  Goal Workflow     — 端到端闭环"
+echo ""
+echo "内置命令（无需安装，Claude Code 自带）:"
+echo "  /goal             — 目标驱动实现，流水线的执行引擎"
 echo ""
 echo "启动研究: 在 Claude Code 中输入你的研究问题即可。"
 echo ""
