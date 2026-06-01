@@ -24,7 +24,7 @@ bash setup.sh
 | [OpenSpec](https://github.com/Fission-AI/OpenSpec) | 规格驱动研究设计 | `npm install -g @fission-ai/openspec` | 46K+ |
 | [GPT Researcher](https://github.com/assafelovic/gpt-researcher) | 自主深度搜索 + 自动报告 | `pip install gpt-researcher` | 26.6K+ |
 | [Academic Research Skills](https://github.com/Imbad0202/academic-research-skills) | 引用审计 + 多 Agent 交叉评审 | `/plugin install academic-research-skills` | 14.7K+ |
-| [Ralph Loop](https://github.com/anthropics/ralph-wiggum) | 自主迭代——不通过就重来 | `/plugin install anthropics/ralph-wiggum` | 官方 |
+| Ralph Loop (ralph-loop) | 自主迭代——不通过就重来 | `/plugin install ralph-loop` | 官方 |
 
 ### 内置命令（无需安装）
 

@@ -85,20 +85,17 @@ else
     fi
 fi
 
-# ---- 4. Ralph Loop (Claude plugin) ----
+# ---- 4. Ralph Loop (Claude plugin, 官方 marketplace) ----
 echo ""
 echo "--- [4/4] Ralph Loop — 自主迭代引擎 ---"
-if claude plugin list 2>/dev/null | grep -q "ralph-wiggum"; then
+if claude plugin list 2>/dev/null | grep -q "ralph-loop"; then
     log "Ralph Loop 已安装"
 else
-    echo "  正在添加 marketplace 并安装..."
-    claude plugin marketplace add anthropics/ralph-wiggum 2>/dev/null || true
-    if claude plugin install anthropics/ralph-wiggum 2>/dev/null; then
+    echo "  正在安装 Ralph Loop（来自官方 marketplace）..."
+    if claude plugin install ralph-loop 2>/dev/null; then
         log "Ralph Loop 安装完成"
     else
-        warn "安装失败。手动运行:"
-        echo "    claude plugin marketplace add anthropics/ralph-wiggum"
-        echo "    claude plugin install anthropics/ralph-wiggum"
+        warn "安装失败。手动运行: claude plugin install ralph-loop"
     fi
 fi
 
@@ -112,7 +109,7 @@ echo "已安装:"
 command -v openspec &>/dev/null && echo "  ✓ OpenSpec" || echo "  ✗ OpenSpec"
 python3 -c "import gpt_researcher" 2>/dev/null && echo "  ✓ GPT Researcher" || echo "  ✗ GPT Researcher"
 claude plugin list 2>/dev/null | grep -q "academic-research-skills" && echo "  ✓ Academic Research Skills" || echo "  ✗ Academic Research Skills"
-claude plugin list 2>/dev/null | grep -q "ralph-wiggum" && echo "  ✓ Ralph Loop" || echo "  ✗ Ralph Loop"
+claude plugin list 2>/dev/null | grep -q "ralph-loop" && echo "  ✓ Ralph Loop" || echo "  ✗ Ralph Loop"
 echo ""
 echo "内置命令（Claude Code 自带）:"
 echo "  /goal  — 目标驱动实现，流水线的执行引擎"
