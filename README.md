@@ -1,66 +1,71 @@
-# Social Research Assistant
+# AI 替代与创造：中国技术招聘市场的结构性变化（2023–2026）
 
-社科研究全流程 AI 助手。**不造新工具——编排现有最佳开源项目为一套研究工作流。**
+> 最终报告：[final-report.md](./final-report.md)
+> 生成日期：2026-06-01
+> 研究助手版本：Social Research Assistant v2.0
 
-> 站在 201K+ Stars 的肩膀上。一键安装，四个工具齐备。
+---
 
-## 一键安装
+## 项目结构
 
-```bash
-# 1. 装插件
-/plugin marketplace add enzoding/social-research-assistant
-/plugin install social-research-assistant
-
-# 2. 装依赖（自动安装全部）
-bash setup.sh
+```
+.
+├── final-report.md               # 最终交付报告（可分享）
+├── README.md                     # 本文件
+├── research/                     # 研究工作流产出
+│   ├── spec.md                   # Phase 1: 研究规格
+│   ├── research-report.md        # Phase 2: 初版研究报告
+│   └── review-report.md          # Phase 5: 质量评审报告
+├── setup.sh                      # 环境依赖安装脚本
+├── social-research-assistant.md  # 社科研究助手技能（v2.0 迭代环架构）
+├── skills/                       # 技能文件
+└── .claude-plugin/               # Claude Code 插件配置
 ```
 
-## 工具箱
+## 研究流程（v2.0 迭代环）
 
-### 需要安装的
+```
+研究设计 → 文献搜索 → 实验设计 → 图表&结构 → 同行评审 → 路由修订 → 交付
+   ↑           ↑           ↑            ↑           │
+   └───────────┴───────────┴────────────┴───────────┘
+                    弱点路由表（定向修复，非盲目重试）
+```
 
-| 工具 | 用途 | 安装 | Stars |
-|------|------|------|-------|
-| [OpenSpec](https://github.com/Fission-AI/OpenSpec) | 规格驱动研究设计 | `npm install -g @fission-ai/openspec` | 46K+ |
-| [GPT Researcher](https://github.com/assafelovic/gpt-researcher) | 自主深度搜索 + 自动报告 | `pip install gpt-researcher` | 26.6K+ |
-| [Academic Research Skills](https://github.com/Imbad0202/academic-research-skills) | 引用审计 + 多 Agent 交叉评审 | `/plugin install academic-research-skills` | 14.7K+ |
-| Ralph Loop (ralph-loop) | 自主迭代——不通过就重来 | `/plugin install ralph-loop` | 官方 |
+| 阶段 | 内容 | 工具 | 产出 |
+|------|------|------|------|
+| Phase 1 — 研究设计 | 问题拆解 + 纳入/排除标准 + 假设 | 手动 / OpenSpec | `research/spec.md` |
+| Phase 2 — 文献搜索 | 多源搜索 + 引用验证 | ARS deep-research | `research/literature-review.md` |
+| Phase 3 — 实验设计 | 假设 + 方法 + 执行 | Python/R 脚本 | `research/experiment-design.md` |
+| Phase 4 — 图表 & 结构 | 可视化 + 章节逻辑 | Python / Markdown | 图表 + 报告草稿 |
+| Phase 5 — 同行评审 | EIC + 3 Reviewers + Devil's Advocate + 跨模型验证 | ARS reviewer + GPT 5.4 | `research/review-report.md` |
+| Phase 6 — 路由修订 | 弱点路由表定向修复（最多 5 轮） | Ralph Loop（增强） | 修订版报告 |
+| Phase 7 — 交付 | 完整报告输出 | 手动 | `final-report.md` |
 
-### 内置命令（无需安装）
+## 核心发现
 
-| 命令 | 用途 | 来源 |
+| 指标 | 数据 | 来源 |
 |------|------|------|
-| `/goal` | 目标驱动实现——流水线的执行引擎 | Claude Code 内置 |
+| AI 岗位增速（2025 同比） | +74.1% | BOSS直聘 |
+| AI 岗位增速（2026 春招） | +172% | BOSS直聘 / 脉脉 |
+| AI 岗占新经济岗位比例 | 2.78% → 22.03% | 脉脉 |
+| 程序员转 AI 开发比例 | 25.7% | 脉脉 |
+| AI 科学家平均月薪 | ~133,000 元 | 脉脉 |
+| 传统软件开发需求变化 | −25% | 翰德 |
 
-## 工作流
+## 数据来源
 
-```
-/spec → /research → /review → /revise → /ship
- 定标准    搜文献      验质量      自主迭代    交付
-```
+- BOSS直聘 ECHO2026 年度合作伙伴大会
+- 脉脉高聘《2026 春招职场洞察报告》
+- 智联招聘 × 北大国发院《2026 人力资源管理趋势报告》
+- 翰德《2026 人才趋势报告》
 
-- `/spec` — OpenSpec：研究规格定义（问题 + 纳入标准 + 质量门禁）
-- `/research` — GPT Researcher：多源并行搜索
-- `/review` — ARS：引用审计 + 多 Agent 交叉评审
-- `/revise` — Ralph Loop：不通过就自动换策略重来
-- `/goal` — Claude Code 内置：逐个实现研究任务
-- `/ship` — 交付最终报告 + 验证追溯
+## 研究局限
 
-## 设计哲学
+详见 [final-report.md 附录 C](./final-report.md#附录c研究方法与可信度说明)。
 
-> You can outsource your thinking, but you cannot outsource your understanding.
+## v2.0 架构亮点
 
-**AI 干脏活：** 搜文献、验引用、交叉比对、迭代修订
-**你做判断：** 定问题、选方法、写结论
-
-## 适用场景
-
-- 文献综述 / 系统综述
-- 研究计划质量检查
-- 投稿前完整性审计
-- 跨方法对比分析
-- 灰色文献搜集
-
-## License
-
-MIT
+- **迭代环 + 弱点路由表** — 评审发现的问题自动路由到对应子技能定向修复，而非盲目全文重试
+- **跨模型交叉验证** — GPT 5.4 可用时启用独立审计；不可用时 Fallback 到多角色子 Agent
+- **质量管理关卡** — 4 道关卡，不通过不进入下一阶段（灵感来源：陈德里 DeliAutoResearch）
+- **GPT Researcher 暂时搁置** — 因演示中 100% 幻觉引用率，v2.0 默认使用 ARS deep-research 替代。保留重新启用路径。

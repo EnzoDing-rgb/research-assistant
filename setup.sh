@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # ============================================================
-# Social Research Assistant — 一键安装脚本
+# Social Research Assistant v2.0 — 一键安装脚本
 # 安装所有依赖工具到当前环境（仅 Claude Code）
 # 如部分工具安装失败，不影响其他工具，可稍后重试
 # ============================================================
@@ -18,7 +18,7 @@ fail() { echo -e "${RED}[✗]${NC} $1"; }
 
 echo ""
 echo "=============================================="
-echo " Social Research Assistant — 依赖安装"
+echo " Social Research Assistant v2.0 — 依赖安装"
 echo "=============================================="
 echo ""
 
@@ -31,9 +31,9 @@ else
     exit 1
 fi
 
-# ---- 1. OpenSpec (npm) ----
+# ---- 1. OpenSpec (npm, 可选) ----
 echo ""
-echo "--- [1/4] OpenSpec — 规格驱动研究设计 ---"
+echo "--- [1/3] OpenSpec — 规格驱动研究设计（可选）---"
 if command -v openspec &>/dev/null; then
     log "OpenSpec 已安装: $(openspec --version 2>&1)"
 else
@@ -45,36 +45,13 @@ else
     fi
 fi
 
-# ---- 2. GPT Researcher (pip) ----
+# ---- 2. Academic Research Skills (Claude plugin) ----
 echo ""
-echo "--- [2/4] GPT Researcher — 自主深度搜索 ---"
-if python3 -c "import gpt_researcher" 2>/dev/null; then
-    log "GPT Researcher 已安装"
-else
-    echo "  正在安装 GPT Researcher..."
-    # 先尝试标准 pip，失败则尝试 --break-system-packages（Debian/Ubuntu 需要）
-    if pip install gpt-researcher &>/dev/null; then
-        log "GPT Researcher 安装完成"
-    elif pip install --break-system-packages gpt-researcher &>/dev/null; then
-        log "GPT Researcher 安装完成（--break-system-packages）"
-    else
-        warn "pip 安装失败。尝试 pipx..."
-        if command -v pipx &>/dev/null && pipx install gpt-researcher &>/dev/null; then
-            log "GPT Researcher 安装完成（pipx）"
-        else
-            warn "安装失败。手动安装: pip install gpt-researcher 或 pipx install gpt-researcher"
-        fi
-    fi
-fi
-
-# ---- 3. Academic Research Skills (Claude plugin) ----
-echo ""
-echo "--- [3/4] Academic Research Skills — 学术质量门禁 ---"
+echo "--- [2/3] Academic Research Skills — 文献搜索 + 学术质量门禁 ---"
 if claude plugin list 2>/dev/null | grep -q "academic-research-skills"; then
     log "Academic Research Skills 已安装"
 else
     echo "  正在添加 marketplace 并安装..."
-    # 先添加 marketplace，再安装插件
     claude plugin marketplace add Imbad0202/academic-research-skills 2>/dev/null || true
     if claude plugin install academic-research-skills 2>/dev/null; then
         log "Academic Research Skills 安装完成"
@@ -85,9 +62,9 @@ else
     fi
 fi
 
-# ---- 4. Ralph Loop (Claude plugin, 官方 marketplace) ----
+# ---- 3. Ralph Loop (Claude plugin, 官方 marketplace) ----
 echo ""
-echo "--- [4/4] Ralph Loop — 自主迭代引擎 ---"
+echo "--- [3/3] Ralph Loop — 路由修订迭代引擎 ---"
 if claude plugin list 2>/dev/null | grep -q "ralph-loop"; then
     log "Ralph Loop 已安装"
 else
@@ -99,6 +76,20 @@ else
     fi
 fi
 
+# ---- 跨模型交叉验证配置提示 ----
+echo ""
+echo "--- 跨模型交叉验证（可选但推荐）---"
+echo ""
+echo "v2.0 支持 GPT 5.4 作为交叉验证的第二模型。"
+echo "如需启用，请设置以下环境变量："
+echo ""
+echo "  export GPT_5_4_API_KEY=\"your-api-key\""
+echo "  export GPT_5_4_BASE_URL=\"https://api.openai.com/v1\""
+echo ""
+echo "未设置时自动 Fallback 到多角色子 Agent 交叉验证。"
+echo "详见 social-research-assistant.md §跨模型交叉验证。"
+echo ""
+
 # ---- 完成 ----
 echo ""
 echo "=============================================="
@@ -106,12 +97,15 @@ echo " 安装检查完毕"
 echo "=============================================="
 echo ""
 echo "已安装:"
-command -v openspec &>/dev/null && echo "  ✓ OpenSpec" || echo "  ✗ OpenSpec"
-python3 -c "import gpt_researcher" 2>/dev/null && echo "  ✓ GPT Researcher" || echo "  ✗ GPT Researcher"
+command -v openspec &>/dev/null && echo "  ✓ OpenSpec（可选）" || echo "  ✗ OpenSpec（可选）"
 claude plugin list 2>/dev/null | grep -q "academic-research-skills" && echo "  ✓ Academic Research Skills" || echo "  ✗ Academic Research Skills"
 claude plugin list 2>/dev/null | grep -q "ralph-loop" && echo "  ✓ Ralph Loop" || echo "  ✗ Ralph Loop"
 echo ""
-echo "内置命令（Claude Code 自带）:"
-echo "  /goal  — 目标驱动实现，流水线的执行引擎"
+echo "跨模型验证:"
+if [ -n "${GPT_5_4_API_KEY:-}" ]; then
+    echo "  ✓ GPT 5.4 已配置"
+else
+    echo "  ○ GPT 5.4 未配置（将使用多角色子 Agent Fallback）"
+fi
 echo ""
-echo "启动研究: 在 Claude Code 中输入你的研究问题即可。"
+echo "启动研究: 在 Claude Code 中输入'用社科研究助手' + 你的研究问题。"

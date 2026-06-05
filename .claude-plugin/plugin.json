@@ -1,7 +1,7 @@
 {
   "name": "social-research-assistant",
-  "version": "1.0.0",
-  "description": "社科研究全流程 AI 助手。编排 GPT Researcher + Academic Research Skills + OpenSpec + Ralph Loop + Goal Workflow 为统一研究工作流。",
+  "version": "2.0.0",
+  "description": "社科研究全流程 AI 助手 v2.0 — 迭代环架构：研究设计 → 文献搜索 → 实验设计 → 图表 & 结构 → 同行评审 → 路由修订 → 交付。内置质量关卡 + 弱点路由表 + 跨模型交叉验证。灵感来源：陈德里 DeliAutoResearch。",
   "author": {
     "name": "丁冯德",
     "email": "enzoding@foxmail.com"
@@ -9,6 +9,6 @@
   "homepage": "https://github.com/enzoding/social-research-assistant",
   "repository": "https://github.com/enzoding/social-research-assistant",
   "license": "MIT",
-  "keywords": ["research", "academic", "social-science", "literature-review", "triangulation"],
+  "keywords": ["research", "academic", "social-science", "literature-review", "triangulation", "cross-model-verification", "iterative-loop", "quality-gates"],
   "skills": ["skills/social-research-assistant.md"]
 }
