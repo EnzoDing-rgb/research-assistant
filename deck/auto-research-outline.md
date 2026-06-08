@@ -13,7 +13,7 @@
 |----|------|
 | 文生图 | Composer / Auto 不自带文生图；需外部模型或手动 PNG |
 | 示例 repo 路径 | `examples/world-model/`（deck 里只提概念，不展开文件树） |
-| 素材 | 本 deck 的 MD、PNG、`index.html` 均放 `deck/` |
+| 素材 | 大纲/PNG 在 `deck/`；网页 deck：`index.html` + `slides/` + `shared/` |
 
 ---
 
@@ -251,5 +251,5 @@ Auto Research 帮你「做研究工序」
 ## 下一步
 
 - [ ] 7 张手绘 PNG → `deck/assets/slide-01.png` … `slide-07.png`
-- [ ] `deck/index.html` 翻页 + 末页音频
+- [x] `deck/index.html` 翻页 + 末页音频 · `./start.sh` 启动
 - [ ] 示例页可选缩略图：从 `examples/world-model/paper-draft.md` 抽一页排版示意（非必须）

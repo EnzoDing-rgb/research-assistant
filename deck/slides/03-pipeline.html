@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>03 · 管线</title>
+<link rel="stylesheet" href="../shared/fonts.css">
+<link rel="stylesheet" href="../shared/handdrawn.css">
+<style>
+  .gate-banner {
+    text-align: center;
+    font-family: var(--font-hand);
+    font-size: 28px;
+    margin: 20px 0;
+    padding: 12px 24px;
+    border: 2px dashed var(--accent);
+    border-radius: 12px;
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+  }
+  .loop-note {
+    text-align: center;
+    font-size: 24px;
+    color: var(--muted);
+    margin-top: 16px;
+  }
+</style>
+</head>
+<body>
+<div class="page-num">03 ★</div>
+<div class="slide-main">
+  <h1 style="font-size:52px">端到端，不是单点工具</h1>
+  <p class="subtitle">不过关，不进下一阶段</p>
+  <div class="pipeline">
+    <span class="pipe-step">设计</span><span class="pipe-arrow">→</span>
+    <span class="pipe-step">文献</span><span class="pipe-arrow">→</span>
+    <span class="pipe-step">实验</span><span class="pipe-arrow">→</span>
+    <span class="pipe-step">图表结构</span><span class="pipe-arrow">→</span>
+    <span class="pipe-step">审稿</span><span class="pipe-arrow">→</span>
+    <span class="pipe-step">修订</span><span class="pipe-arrow">→</span>
+    <span class="pipe-step" style="background:var(--lavender)">交付</span>
+  </div>
+  <div style="text-align:center">
+    <div class="gate-banner">🚦 Quality Gates · 绿灯才前进</div>
+  </div>
+  <p class="loop-note">审稿意见 → 按问题类型路由回对应阶段 → 再评审 ↻</p>
+</div>
+<script src="../shared/nav-keys.js"></script>
+</body>
+</html>
