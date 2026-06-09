@@ -2,8 +2,12 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>/auto-research · Deck</title>
 <script>
+  window.DECK_BUILD = "9slides-20260609";
   window.DECK_MANIFEST = [
     { file: "slides/01-cover.html", label: "封面" },
     { file: "slides/02-insert.html", label: "全流程图" },
@@ -139,7 +143,8 @@
   function show(idx) {
     if (idx < 0 || idx >= deck.length) return;
     current = idx;
-    frame.src = deck[idx].file;
+    const ver = window.DECK_BUILD || "1";
+    frame.src = `${deck[idx].file}?v=${encodeURIComponent(ver)}`;
     counter.innerHTML = `${idx + 1} / ${deck.length} <span class="label">${deck[idx].label || ''}</span>`;
     try { localStorage.setItem(storageKey, String(idx)); } catch (_) {}
     if (location.hash !== '#' + (idx + 1)) {

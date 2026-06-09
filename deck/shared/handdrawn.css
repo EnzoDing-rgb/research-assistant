@@ -323,6 +323,15 @@ h1::after {
   opacity: 0.85;
 }
 
+.cover-series {
+  text-align: center;
+  font-family: var(--font-hand);
+  font-size: 44px;
+  color: var(--muted);
+  margin: 0 0 12px;
+  letter-spacing: 0.08em;
+}
+
 /* cover doodle strip */
 .cover-doodle {
   margin: 48px auto 0;
