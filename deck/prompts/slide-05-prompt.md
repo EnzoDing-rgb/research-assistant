@@ -1,6 +1,6 @@
 # Slide 05 · 世界模型三分类（即梦 prompt）
 
-**保存为**：`/home/fengde/Projects/full-stack/social-courses/research-assistant/deck/assets/slide-05-world-model.png`  
+**保存为**：`/home/fengde/Projects/full-stack/social-courses/research-assistant/deck/assets/slide-07-world-model.png`  
 **画幅**：16:9（1920×1080）  
 **风格锚**：`deck/assets/reference-style.png` — 近白纸、细铅笔线稿、淡蓝绿赭水彩点缀、大量留白、角落淡灰方格草稿感  
 **参考分类**：李飞飞 2026 三分类 Renderer / Simulator / Planner（仅作画面组织，不要学术脚注）
@@ -56,4 +56,4 @@
 1. 上传风格参考：`deck/assets/reference-style.png`
 2. 比例选 **16:9**
 3. 若三字英文类名糊了，可二轮只修某一格
-4. 生成满意后存为 `slide-05-world-model.png`，网页 slide 05 可叠图
+4. 生成满意后存为 `deck/assets/slide-07-world-model.png`（第 7 页世界模型）

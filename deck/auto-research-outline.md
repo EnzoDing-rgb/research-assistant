@@ -13,7 +13,7 @@
 |----|------|
 | 文生图 | Composer / Auto 不自带文生图；需外部模型或手动 PNG |
 | 示例 repo 路径 | `examples/world-model/`（deck 里只提概念，不展开文件树） |
-| 素材 | 大纲/PNG 在 `deck/`；网页 deck：`index.html` + `slides/` + `shared/` |
+| 素材 | `deck/assets/`（PNG·音频）· `slides/` · `shared/` · `prompts/` · `index.html` |
 
 ---
 
