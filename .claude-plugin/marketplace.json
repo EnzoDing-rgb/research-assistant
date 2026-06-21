@@ -1,0 +1,17 @@
+{
+  "name": "research-assistant",
+  "owner": {
+    "name": "丁冯德",
+    "url": "https://github.com/EnzoDing-rgb"
+  },
+  "description": "社科研究助手 v3.0 — 语境锚点理论发现 + 顶刊范文后置校准。迭代环架构，灵活入口，AI 智能判断起点。",
+  "plugins": [
+    {
+      "name": "research-assistant",
+      "source": "./",
+      "description": "6-phase iterative loop: phenomenon anchoring + theory discovery → literature search → empirical design → data viz → peer review + template calibration → revision + delivery. Skips empirical phases for pure theory papers.",
+      "version": "3.0.0",
+      "license": "MIT"
+    }
+  ]
+}
