@@ -1,7 +1,7 @@
 {
   "name": "research-assistant",
-  "version": "2.0.0",
-  "description": "AI Research Assistant v2.0 — iterative loop architecture with quality gates, weakness routing, and cross-model verification. Inspired by Chen Deli's DeliAutoResearch.",
+  "version": "3.0.0",
+  "description": "AI Research Assistant v3.0 — context-anchored theory discovery + post-hoc template calibration. Iterative loop with quality gates, weakness routing, and cross-model verification.",
   "author": {
     "name": "丁冯德",
     "email": "enzoding@foxmail.com"
