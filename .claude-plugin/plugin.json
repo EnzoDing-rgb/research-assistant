@@ -9,6 +9,4 @@
   "homepage": "https://github.com/EnzoDing-rgb/research-assistant",
   "repository": "https://github.com/EnzoDing-rgb/research-assistant",
   "license": "MIT",
-  "keywords": ["research", "academic", "literature-review", "survey", "world-model", "cross-model-verification", "quality-gates"],
-  "skills": ["skills/research-skills.md"]
-}
+  "keywords": ["research", "academic", "literature-review", "survey", "world-model", "cross-model-verification", "quality-gates"]}
