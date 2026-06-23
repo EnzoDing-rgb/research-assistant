@@ -1,7 +1,7 @@
 {
   "name": "research-assistant",
-  "version": "3.0.0",
-  "description": "AI Research Assistant v3.0 — context-anchored theory discovery + post-hoc template calibration. Iterative loop with quality gates, weakness routing, and cross-model verification.",
+  "version": "4.0.0",
+  "description": "Academic Research Assistant v4.0 — context-anchored theory discovery + post-hoc template calibration. CS/STEM + social sciences + humanities. Iterative loop with quality gates, weakness routing, and multi-agent independent audit.",
   "author": {
     "name": "丁冯德",
     "email": "enzoding@foxmail.com"
