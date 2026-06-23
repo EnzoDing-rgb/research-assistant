@@ -1,20 +1,14 @@
 # Academic Research Assistant v4.0
 
-Claude Code 全流程学术研究技能。6 阶段迭代环：从问题出发，找理论、搜文献、审质量、出报告。覆盖 CS/STEM/社科/人文。
+Claude Code 全流程学术研究技能。6 阶段迭代环：从问题出发，找理论、搜文献、审质量、出报告。覆盖社科/CS/STEM/人文。
 
 ## 它解决什么问题
 
 做学术研究时，三个高频痛点：
 
-- **找理论/技术路线靠运气。** 对 AI 说「我对 X 感兴趣，帮我找文献」→ AI 只能随机联想，因为它对 X 没有画面感。本技能用**锚点材料建立语境**——CS 用 survey/SoK/related work，社科用深度报道/案例——先让 AI 建立脉络，再从细节联想学术概念，最后用数据库按引用量验证
+- **找理论/技术路线靠运气。** 对 AI 说「我对 X 感兴趣，帮我找文献」→ AI 只能随机联想，因为它对 X 没有画面感。本技能用**锚点材料建立语境**——社科用深度报道/案例，CS 用 survey/SoK/related work——先让 AI 建立脉络，再从细节联想学术概念，最后用数据库按引用量验证
 - **写出来的东西 AI 味重。** AI 自由发挥 → 假大空、不符合审稿标准。本技能把范文放在**初稿完成之后**做对照校准——范文不进主流程，不污染原始思考
 - **纯理论和算法论文不好套流程。** 实证设计和数据图表两个阶段可根据论文类型自动跳过
-
-## v4.0 更新
-
-- **CS/STEM 第一公民支持**：survey/SoK/related work 锚点、6 种论文贡献类型（新系统/实证/理论/现象建构/跨学科/综述）、arXiv + Semantic Scholar + OpenAlex 可组合文献数据库
-- **多代理独立审计**：替代跨模型验证，零配置，用户当前模型多角色子 Agent 并行交叉审计
-- **关键 Bug 修复**：`skills/research-skills.md` 从符号链接改为真实文件，解决 `claude plugins install` 后斜杠命令消失的问题
 
 ## 安装
 
@@ -46,7 +40,7 @@ claude mcp add openalex --scope user -- npx openalex-mcp
 1. 问题锚定与理论发现 → 2. 文献搜索 → 3. 实证设计 → 4. 数据图表 → 5. 同行评审与范文校准 → 6. 路由修订与交付
 ```
 
-- Phase 1 锚点材料：CS 用 survey/SoK/related work，社科用深度报道/案例
+- Phase 1 锚点材料：社科用深度报道/案例，CS 用 survey/SoK/related work
 - Phase 2 文献搜索：ARS deep-research（核心）+ arXiv / Semantic Scholar / OpenAlex（推荐 MCP）
 - Phase 3（实证设计）和 Phase 4（数据图表）：理论/算法类论文自动跳过
 - Phase 5：多角色同行评审 + 同类型顶会/顶刊范文论证结构对照

@@ -5,11 +5,11 @@ description: Academic Research Assistant v4.0 — 6-phase iterative loop: proble
 
 # Academic Research Assistant v4.0
 
-全学科研究助手。v4.0 升级：CS/STEM 第一公民支持 + 可组合文献数据库（arXiv / Semantic Scholar / OpenAlex MCP）。
+全学科研究助手。v4.0 升级：社科/CS/STEM 平等支持 + 可组合文献数据库（arXiv / Semantic Scholar / OpenAlex MCP）。
 
 核心机制：
 
-- **语境锚点法（Phase 1）**：不直接从抽象主题联想。CS 用 survey/SoK/related work 做锚点；社科用深度报道/案例。有锚点 → 有脉络 → 文献搜索有根有据
+- **语境锚点法（Phase 1）**：不直接从抽象主题联想。社科用深度报道/案例做锚点；CS 用 survey/SoK/related work。有锚点 → 有脉络 → 文献搜索有根有据
 - **范文后置校准（Phase 5）**：范文不进主生成流程。初稿完成后，找同类型顶会/顶刊范文对照论证结构——校准工具，不是思维模具
 - **灵活跳转**：AI 按用户输入判断入口。理论/算法类论文实证设计和数据图表自动跳过
 - **可组合文献源**：ARS deep-research（四索引交叉核验）为核心引擎；推荐配置 arXiv / Semantic Scholar / OpenAlex MCP 增强覆盖
