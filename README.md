@@ -1,3 +1,28 @@
+# research-assistant
+
+Claude Code 技能集合。包含两个独立技能：
+
+- **/learn** — AI 主导的技术概念教学（从问题动机出发，层层建立直觉，不留悬空概念）
+- **research-assistant-enzo** — 全流程学术研究助手 v4.0（6 阶段迭代环：从问题出发，找理论、搜文献、审质量、出报告）
+
+---
+
+## /learn
+
+AI 主导的技术概念教学技能。支持 PPT 截图和纯文字提问。
+
+**核心主张：** 用户基础有限时，AI 主动规划最优讲解路径。从「这东西解决什么问题」出发，逐层展开机制，每个新概念当场解释并建立联系。禁止生活化比喻，禁止堆术语，用通顺中文口语。
+
+```bash
+/learn Transformer 是什么
+/learn 反向传播怎么理解
+/learn [贴一张 PPT 截图]
+```
+
+详见 [learn.md](./learn.md)
+
+---
+
 # Academic Research Assistant v4.0
 
 Claude Code 全流程学术研究技能。6 阶段迭代环：从问题出发，找理论、搜文献、审质量、出报告。覆盖社科/CS/STEM/人文。
