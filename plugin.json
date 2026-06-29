@@ -1,0 +1,23 @@
+{
+  "name": "research-assistant",
+  "version": "5.0.0",
+  "description": "Academic Research Assistant v5.0 — 8-phase pipeline with PaperOrchestra-style 5-agent drafting. Context-anchored theory discovery + post-hoc template calibration. CS/STEM + social sciences + humanities. Quality gates, weakness routing, Devil's Advocate, multi-agent independent audit.",
+  "author": {
+    "name": "丁冯德",
+    "email": "enzoding@foxmail.com"
+  },
+  "homepage": "https://github.com/EnzoDing-rgb/research-assistant",
+  "repository": "https://github.com/EnzoDing-rgb/research-assistant",
+  "license": "MIT",
+  "keywords": [
+    "research",
+    "academic",
+    "literature-review",
+    "paper-writing",
+    "survey",
+    "peer-review",
+    "quality-gates",
+    "paper-orchestra",
+    "social-science"
+  ]
+}

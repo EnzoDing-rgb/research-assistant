@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # ============================================================
-# Social Research Assistant v2.0 — 一键安装脚本
+# Academic Research Assistant v5.0 — 一键安装脚本
 # 安装所有依赖工具到当前环境（仅 Claude Code）
 # 如部分工具安装失败，不影响其他工具，可稍后重试
 # ============================================================
@@ -18,7 +18,7 @@ fail() { echo -e "${RED}[✗]${NC} $1"; }
 
 echo ""
 echo "=============================================="
-echo " Social Research Assistant v2.0 — 依赖安装"
+echo " Academic Research Assistant v5.0 — 依赖安装"
 echo "=============================================="
 echo ""
 
@@ -80,14 +80,14 @@ fi
 echo ""
 echo "--- 跨模型交叉验证（可选但推荐）---"
 echo ""
-echo "v2.0 支持 GPT 5.4 作为交叉验证的第二模型。"
-echo "如需启用，请设置以下环境变量："
+echo "v5.0 支持 Codex MCP (GPT) 作为跨模型审稿的第二视角。"
+echo "如需启用，请配置 Codex CLI 并添加 MCP server："
 echo ""
-echo "  export GPT_5_4_API_KEY=\"your-api-key\""
-echo "  export GPT_5_4_BASE_URL=\"https://api.openai.com/v1\""
+echo "  npm install -g @openai/codex"
+echo "  claude mcp add codex -s user -- codex mcp-server"
 echo ""
 echo "未设置时自动 Fallback 到多角色子 Agent 交叉验证。"
-echo "详见 social-research-assistant.md §跨模型交叉验证。"
+echo "详见 research/SKILL.md Phase 6。"
 echo ""
 
 # ---- 完成 ----
@@ -108,4 +108,4 @@ else
     echo "  ○ GPT 5.4 未配置（将使用多角色子 Agent Fallback）"
 fi
 echo ""
-echo "启动研究: 在 Claude Code 中输入'用社科研究助手' + 你的研究问题。"
+echo "启动研究: 在 Claude Code 中输入 '/research' + 你的研究问题。"

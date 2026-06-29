@@ -1,133 +1,8 @@
----
-name: research-assistant-enzo
-description: Academic Research Assistant v5.0 — 8-phase iterative loop: problem anchoring & theory discovery → literature search → empirical design → data/figures → drafting (PaperOrchestra-style 5-agent) → peer review & template calibration → revision & delivery → final formatting. CS/STEM + social sciences + humanities. Flexible entry, AI judges starting point. Multi-agent independent audit for quality verification.
----
-
-# Academic Research Assistant v5.0
-
-全学科研究助手。v5.0 升级：8 阶段流程 + PaperOrchestra 风格 5-agent 初稿撰写 + CS 顶会格式化。
-
-核心机制：
-
-- **语境锚点法（Phase 1）**：不直接从抽象主题联想。社科用深度报道/案例做锚点；CS 用 survey/SoK/related work。有锚点 → 有脉络 → 文献搜索有根有据
-- **范文后置校准（Phase 6）**：范文不进主生成流程。初稿完成后，找同类型顶会/顶刊范文对照论证结构——校准工具，不是思维模具
-- **5-Agent 初稿撰写（Phase 5）**：Outline → 并行[图表, 文献审核] → Section Writing（单次综合调用）→ Content Refinement（带 halt rules 的迭代环）。灵感来源：PaperOrchestra (Song et al., arXiv:2604.05018)
-- **灵活跳转**：AI 按用户输入判断入口。理论/算法类论文实证设计和数据图表自动跳过
-- **可组合文献源**：ARS deep-research（四索引交叉核验）为核心引擎；推荐配置 arXiv / Semantic Scholar / OpenAlex MCP 增强覆盖
+# Pipeline — 8 阶段执行详情
 
 ---
 
-## 触发方式
-
-用户提到研究相关请求时触发。触发后回复：
-
-> **学术研究助手 v5.0 就绪。** 说说你的研究想法，我判断从哪里开始：
-> 1. 问题锚定与理论发现 → 2. 文献搜索 → 3. 实证设计 → 4. 数据图表 → 5. 初稿撰写 → 6. 同行评审与范文校准 → 7. 路由修订与交付 → 8. 终稿格式化
-> 已有材料可以说一声，跳过已完成的步骤。
-> 推荐：配置 arXiv / Semantic Scholar / OpenAlex MCP 增强 CS 文献覆盖。
-
----
-
-## 架构
-
-```
-Phase 1: 问题锚定与理论发现
-  锚点材料（CS: survey/SoK; 社科: 深度报道）→ 语境提取 → 概念联想 → 验证 → 理论/技术地图
-         │
-         ▼
-Phase 2: 文献搜索
-  ARS deep-research（核心）+ arXiv / Semantic Scholar / OpenAlex（推荐 MCP）
-         │
-         ▼
-Phase 3: 实证设计  ◀── 理论/算法/形式化论文可跳过
-  假设 → 方法 → 变量 → 数据收集方案
-         │
-         ▼
-Phase 4: 数据图表  ◀── 无可量化结果可跳过
-  matplotlib/seaborn 图表 + 表格
-         │
-         ▼
-Phase 5: 初稿撰写  ◀── PaperOrchestra 风格 5-agent drafting
-  5a: Outline → 5b: 并行[图表生成, 文献审核] → 5c: Section Writing → 5d: Content Refinement
-         │
-         ▼
-Phase 6: 同行评审与范文校准
-  ARS reviewer（5 角色） + 多代理独立审计 + 顶刊/顶会范文对照
-         │
-    ┌────┴────┐
-    ▼         ▼
-  通过      发现问题 → 弱点路由表分发 → Phase 7
-         │
-         ▼
-Phase 7: 路由修订与交付
-  定向修复（最多 5 轮）→ 最终报告
-         │
-         ▼
-Phase 8: 终稿格式化
-  顶会模板套用 + 引用校验 + 投稿 checklist
-```
-
----
-
-## 质量管理关卡
-
-每道关卡不通过不能进入下一阶段。关卡不做硬性数值阈值，但必须全部绿灯。
-
-| 关卡 | 位置 | 检查项 |
-|------|------|--------|
-| **Gate 1: 锚定** | Phase 1→2 | 锚点材料已找到（CS: survey/SoK/related work; 社科: 深度报道）、语境提取完整、概念联想有锚点细节支撑、数据库验证通过 |
-| **Gate 2: 文献** | Phase 2→3/5 | 引用来源可验证、覆盖核心文献、时效性满足需求 |
-| **Gate 3: 实证** | Phase 3→4 | （仅运行实证设计时）假设明确、方法预先指定、变量定义清晰 |
-| **Gate 4: 图表** | Phase 4→5 | （仅运行数据图表时）每张图表承载非平凡洞见、标题含结论、正文引用 |
-| **Gate 5: 初稿** | Phase 5→6 | Outline 完整、所有 section 已填充、引用全部在 refs.bib 中可查、无数值幻觉 |
-| **Gate 6: 终审** | Phase 6→7 | 所有已运行 Gate 通过、评审分数达标、范文对照无结构性缺陷 |
-| **Gate 7: 修订** | Phase 7→8 | 所有 CRITICAL 清零、评审分数达标、DA 无 standing CRITICAL |
-| **Gate 8: 格式** | Phase 8→交付 | 引用格式统一、页数合规、模板样式正确、checklist 全通过 |
-
----
-
-## 弱点路由表
-
-Phase 6 发现的问题按此表定向路由，不盲目重试全文。
-
-| 评审发现 | 路由目标 | 操作 |
-|---------|---------|------|
-| "概念联想缺乏语境支撑 / 理论/技术选择随机" | Phase 1 | 重新搜索锚点材料（CS: survey/SoK; 社科: 深度报道），加强语境锚定 |
-| "相关 work 覆盖不足 / missing key baselines" | Phase 2 | 补充文献搜索，查引用图谱找遗漏工作 |
-| "引用覆盖不足 / 关键文献缺失" | Phase 2 | ARS deep-research 定向补充 |
-| "引用来源不可验证" | Phase 2 | 逐条核验，无法验证的标注或替换 |
-| "缺乏实证 / 实验方法不严谨" | Phase 3 | 补充实验设计或统计方法 |
-| "数据表格不可比较 / 缺可视化" | Phase 4 | 重组图表、补充误差信息 |
-| "章节结构混乱 / 逻辑跳跃" | Phase 5 | 重新生成 outline，重跑 section writing |
-| "分析深度不足 / 论证薄弱" | Phase 7 | 增加批判性分析段落 |
-| "论断过强 / 缺乏限定词" | Phase 7 | 降级为 hedge language |
-| "与顶刊/顶会范文论证标准差距大" | Phase 7 | 对照范文论证结构增强 |
-| "引用格式不统一 / 页数超标" | Phase 8 | 重新格式化 |
-
----
-
-## 多代理独立审计
-
-关键质量检查不能单一代理自审。启动多个独立子 Agent，戴不同眼镜交叉验证。
-
-**机制：**
-
-Claude Code 多子 Agent 并行独立审计：
-- 每个子 Agent 使用不同系统提示词，扮演不同角色
-- 方法论专家 / 数据侦探 / 前提攻击者（Devil's Advocate）
-- 各自独立评审，结果汇总比对
-- 共享认知框架局限（frame-lock）通过角色差异化提示词缓解
-
-**优势：**
-- 零配置——无需额外 API key 或模型部署
-- 用户当前配置的模型即用
-- 多角色交叉审计覆盖率优于单一视角
-
----
-
-## Phase 详情
-
-### Phase 1: 问题锚定与理论发现
+## Phase 1: 问题锚定与理论发现
 
 **核心问题：** AI 靠概率推断，不靠语境理解。直接说"我对 X 感兴趣，帮我找文献"——AI 只能随机联想，缺乏脉络。
 
@@ -146,13 +21,14 @@ Claude Code 多子 Agent 并行独立审计：
 6. **理论/技术地图生成** — 构建技术/理论网络：各方向关系、适用场景、核心假设、代表论文
 
 **产出：** `research/theory-map.md`
-**Gate 出口（Gate 1）：** 锚点材料已找到、语境提取完整、概念有锚点细节支撑、数据库验证通过
 
 **推荐工具：** WebSearch（搜锚点材料）、WebFetch（获取全文）、Semantic Scholar（验证影响力）
 
+> Gate 1 → 锚点材料已找到、语境提取完整、概念有锚点细节支撑、数据库验证通过。
+
 ---
 
-### Phase 2: 文献搜索
+## Phase 2: 文献搜索
 
 **核心引擎：** `academic-research-skills:deep-research` — 13-agent 研究团队，四索引交叉核验（Semantic Scholar + OpenAlex + Crossref + arXiv），PRISMA 系统综述模式。
 
@@ -179,11 +55,12 @@ Skill 工具:
 ```
 
 **产出：** `research/literature-review.md` + `research/references.bib`
-**Gate 出口（Gate 2）：** 引用可验证、覆盖核心文献、时效性合格
+
+> Gate 2 → 引用可验证、覆盖核心文献、时效性合格。
 
 ---
 
-### Phase 3: 实证设计
+## Phase 3: 实证设计
 
 **跳过条件：** 纯理论/思辨/概念分析/CS 算法理论/数学证明类论文 → 跳过。AI 判断：涉及实证数据收集（实验/benchmark/调查/访谈/二手数据）→ 运行；仅概念分析或数学/算法推导 → 跳过。
 
@@ -195,11 +72,12 @@ Skill 工具:
 5. 结果记录 — `results.json` + `experiment_summary.md`
 
 **产出：** `research/experiment-design.md` + `research/results.json`（如执行）
-**Gate 出口（Gate 3，仅运行此阶段时）：** 假设明确、方法恰当、变量定义清晰
+
+> Gate 3（仅运行此阶段时）→ 假设明确、方法恰当、变量定义清晰。
 
 ---
 
-### Phase 4: 数据图表
+## Phase 4: 数据图表
 
 **跳过条件：** 无可量化结果需可视化 → 跳过。AI 判断：Phase 3 产生了数据 or 用户有二手数据需图表呈现 → 运行；纯理论论证无图表需求 → 跳过。
 
@@ -211,15 +89,16 @@ Skill 工具:
 **每张图表必须：** 承载非平凡洞见、标题含结论（不只描述）、正文引用
 
 **产出：** `figures/` + 嵌入图表的报告草稿
-**Gate 出口（Gate 4，仅运行此阶段时）：** 图表有洞见、标题含结论、正文引用
+
+> Gate 4（仅运行此阶段时）→ 图表有洞见、标题含结论、正文引用。
 
 ---
 
-### Phase 5: 初稿撰写（PaperOrchestra 风格 5-Agent Drafting）
+## Phase 5: 初稿撰写（PaperOrchestra 风格 5-Agent Drafting）
 
 灵感来源：PaperOrchestra (Song et al., arXiv:2604.05018, 2026)。核心理念：先 outline 定结构，再并行拉图表+验文献，再单次综合写作成稿，最后迭代打磨。共 ~10-15 次 LLM 调用（vs PaperOrchestra 原版 ~60-70 次，轻量适配版）。
 
-#### 前置条件
+### 前置条件
 
 进入 Phase 5 前确认：
 - `research/literature-review.md` + `research/references.bib` 已就绪（Phase 2 产出）
@@ -227,7 +106,7 @@ Skill 工具:
 - 如有图表：`figures/` 目录已就绪（Phase 4 产出）
 - 确认目标投稿 venue（如 NeurIPS / ICML / ACL / 无特定 venue → 通用学术写作）
 
-#### 5a: Outline Generation（1 次 LLM 调用）
+### 5a: Outline Generation（1 次 LLM 调用）
 
 基于所有已有材料生成论文大纲 `outline.json`：
 
@@ -255,9 +134,9 @@ Skill 工具:
 }
 ```
 
-**Gate 5a：** Outline 包含所有必要 section、citation_hints 覆盖所有声称、figure_plan 与实验数据对应。
+> Gate 5a → Outline 包含所有必要 section、citation_hints 覆盖所有声称、figure_plan 与实验数据对应。
 
-#### 5b: 并行处理 — 图表生成 ∥ 文献审核（可并发）
+### 5b: 并行处理 — 图表生成 ∥ 文献审核（可并发）
 
 启动 **两个独立子 Agent** 并行工作（Claude Code 支持多子 Agent 并发）：
 
@@ -273,9 +152,9 @@ Skill 工具:
 - 对每篇引用提取 abstract 关键信息，生成 `citation_notes.json`：`{citekey: {verified: bool, key_claim: "...", relevance: "..."}}`
 - 产出 `citation_notes.json` + `gap_report.md`（遗漏文献列表）
 
-**Gate 5b：** 所有 figure 已生成或占位、citation_notes 覆盖 ≥90% 引用、gap_report 无 CRITICAL 遗漏。
+> Gate 5b → 所有 figure 已生成或占位、citation_notes 覆盖 ≥90% 引用、gap_report 无 CRITICAL 遗漏。
 
-#### 5c: Section Writing（1 次综合 LLM 调用）
+### 5c: Section Writing（1 次综合 LLM 调用）
 
 **一次性写入所有 section。** 不拆分为 per-section 调用——保持全文连贯性。
 
@@ -301,9 +180,10 @@ Skill 工具:
 | **CS 论文语调** | 密集、客观、技术化。不写 "we believe" / "we think"，写 "we demonstrate" / "we observe"。 |
 
 **产出：** `draft.md`（或 `draft.tex`，如用户有 LaTeX 模板）
-**Gate 5c：** 所有 section 已填充、无孤立 subsection、引用全部可查、图示已嵌入或占位。
 
-#### 5d: Content Refinement Loop（≤3 迭代）
+> Gate 5c → 所有 section 已填充、无孤立 subsection、引用全部可查、图示已嵌入或占位。
+
+### 5d: Content Refinement Loop（≤3 迭代）
 
 对 `draft.md` 进行模拟同行评审 + 定向修改。灵感来源：PaperOrchestra Step 5 Content Refinement Agent。
 
@@ -346,15 +226,16 @@ DA 发出的 CRITICAL 如果未被充分回应，覆盖 score 判定 → 强制 
 5. DA CRITICAL 未被解决（强制 REVERT 后停止）
 
 **产出：** `draft_final.md`（或 `.tex`）+ `refinement_log.md`（每轮评分历史 + 修改记录）
-**Gate 出口（Gate 5）：** Outline 完整、所有 section 填充、引用可查、无数值幻觉、refinement 总分 ≥ 60（Major Revision 以上）
+
+> Gate 5 → Outline 完整、所有 section 填充、引用可查、无数值幻觉、refinement 总分 ≥ 60（Major Revision 以上）。
 
 ---
 
-### Phase 6: 同行评审与范文校准
+## Phase 6: 同行评审与范文校准
 
 **两部分并行：**
 
-#### 6a: 同行评审
+### 6a: 同行评审
 
 **工具：** `academic-research-skills:ars-reviewer`
 
@@ -369,7 +250,20 @@ Skill 工具:
 
 **独立审计增强：** 启动多角色子 Agent 并行评审（方法论专家 / 数据侦探 / 前提攻击者），结果汇总比对。
 
-#### 6b: 范文校准（后置）
+**多代理独立审计机制：**
+
+Claude Code 多子 Agent 并行独立审计：
+- 每个子 Agent 使用不同系统提示词，扮演不同角色
+- 方法论专家 / 数据侦探 / 前提攻击者（Devil's Advocate）
+- 各自独立评审，结果汇总比对
+- 共享认知框架局限（frame-lock）通过角色差异化提示词缓解
+
+**优势：**
+- 零配置——无需额外 API key 或模型部署
+- 用户当前配置的模型即用
+- 多角色交叉审计覆盖率优于单一视角
+
+### 6b: 范文校准（后置）
 
 **核心原则：** 范文不进主生成流程。初稿完成后，找同类型顶会/顶刊范文做对照——范文是校准工具，不是思维模具。
 
@@ -397,11 +291,32 @@ Skill 工具:
 评分：6=Strong Accept / 5=Accept / 4=Borderline Accept / 3=Borderline Reject / 2=Reject / 1=Strong Reject
 
 **产出：** `research/review-report.md`（含评分 + CRITICAL/MAJOR/MINOR + 弱点路由标签 + 范文对照差距）
-**Gate 出口（Gate 6）：** 所有已运行 Gate 通过、分数达标、范文对照无结构性缺陷
+
+> Gate 6 → 所有已运行 Gate 通过、分数达标、范文对照无结构性缺陷。
 
 ---
 
-### Phase 7: 路由修订与交付
+## 弱点路由表
+
+Phase 6 发现的问题按此表定向路由，不盲目重试全文。
+
+| 评审发现 | 路由目标 | 操作 |
+|---------|---------|------|
+| "概念联想缺乏语境支撑 / 理论/技术选择随机" | Phase 1 | 重新搜索锚点材料，加强语境锚定 |
+| "相关 work 覆盖不足 / missing key baselines" | Phase 2 | 补充文献搜索，查引用图谱找遗漏工作 |
+| "引用覆盖不足 / 关键文献缺失" | Phase 2 | ARS deep-research 定向补充 |
+| "引用来源不可验证" | Phase 2 | 逐条核验，无法验证的标注或替换 |
+| "缺乏实证 / 实验方法不严谨" | Phase 3 | 补充实验设计或统计方法 |
+| "数据表格不可比较 / 缺可视化" | Phase 4 | 重组图表、补充误差信息 |
+| "章节结构混乱 / 逻辑跳跃" | Phase 5 | 重新生成 outline，重跑 section writing |
+| "分析深度不足 / 论证薄弱" | Phase 7 | 增加批判性分析段落 |
+| "论断过强 / 缺乏限定词" | Phase 7 | 降级为 hedge language |
+| "与顶刊/顶会范文论证标准差距大" | Phase 7 | 对照范文论证结构增强 |
+| "引用格式不统一 / 页数超标" | Phase 8 | 重新格式化 |
+
+---
+
+## Phase 7: 路由修订与交付
 
 **工具：** Ralph Loop（增强定向路由）
 
@@ -424,15 +339,15 @@ Skill 工具:
          待修复报告: <报告绝对路径>"
 ```
 
-**Gate 出口（Gate 7）：** 所有 CRITICAL 清零、评审分数达标、DA 无 standing CRITICAL
+> Gate 7 → 所有 CRITICAL 清零、评审分数达标、DA 无 standing CRITICAL。
 
 ---
 
-### Phase 8: 终稿格式化
+## Phase 8: 终稿格式化
 
 根据目标 venue 应用格式规范 + 最终校验。
 
-#### 8a: CS 顶会要求速查
+### 8a: CS 顶会要求速查
 
 | Conference | Page Limit | Camera-Ready | Key Requirement |
 |------------|------------|-------------|-----------------|
@@ -446,7 +361,7 @@ Skill 工具:
 
 **通用规则：** 参考文献不计入页数、附录无上限但审稿人无义务阅读、double-blind 需匿名化。
 
-#### 8b: 引用校验与反幻觉
+### 8b: 引用校验与反幻觉
 
 **核心原则：AI 生成引用有 ~40% 错误率。绝不凭记忆写 BibTeX。**
 
@@ -462,7 +377,7 @@ Skill 工具:
 - 不确定论文是否存在 → **绝不引用**，先搜索或标 placeholder
 - 格式统一为 venue 要求（ACL → ACL style、ICML → ICML style、通用 → APA 7.0）
 
-#### 8c: 学术写作质量终检（Gopen & Swan 7 原则 + 社区实践）
+### 8c: 学术写作质量终检（Gopen & Swan 7 原则 + 社区实践）
 
 **A. 结构层面（Gopen & Swan 读者期望原则）：**
 
@@ -520,7 +435,7 @@ Skill 工具:
 - Related Work 按方法论聚类，不逐篇罗列
 - 慷慨引用——审稿人很可能就是相关论文作者
 
-#### 8d: 常见问题诊断
+### 8d: 常见问题诊断
 
 | 症状 | 诊断 | 修复 |
 |------|------|------|
@@ -530,7 +445,7 @@ Skill 工具:
 | 读者反馈难理解 | 无导航句、术语不一致 | 加 "In this section, we show X"；全文统一术语 |
 | 缺统计显著性 | 只有均值无分散度 | 加 error bars（标注 std dev/error）、运行次数、统计检验 |
 
-#### 8e: 投稿 Checklist 生成
+### 8e: 投稿 Checklist 生成
 
 根据目标 venue 生成对应的投稿 checklist：
 - 页数是否合规（参考文献不计、附录不计）
@@ -539,120 +454,5 @@ Skill 工具:
 - 特定 venue 要求：NeurIPS checklist / ICML Broader Impact / ICLR LLM disclosure
 
 **产出：** `final_report.md`（或 `final/paper.tex` + `final/paper.pdf`）+ `submission_checklist.md`
-**Gate 出口（Gate 8）：** 引用全部可验证（0 placeholder）、页数合规、模板正确、checklist 全通过、写作质量 5 类检查通过
----
 
-## 灵活入口
-
-AI 根据用户输入智能判断从哪个 Phase 开始。不需要用户声明模式。
-
-| 用户说 | AI 判断 |
-|--------|---------|
-| "我想研究 X，不知道怎么入手" | Phase 1 开始 |
-| "帮我针对 Y 方向做 literature review" | Phase 1→2（先确认锚点） |
-| "我有个研究 idea，已有 related work" | Phase 2 开始 |
-| "帮我搜 X 主题最新论文" | Phase 2 only |
-| "文献综述/related work 写完了，怎么设计实验" | Phase 3 |
-| "实验结果/benchmark 跑完了，帮我做图/表" | Phase 4 |
-| "实验做完了，帮我写初稿" | Phase 5 |
-| "草稿写完了，帮我审一下" | Phase 6 |
-| "rebuttal/审稿意见回来了，帮我改" | Phase 7 |
-| "初稿终稿帮我做格式化" | Phase 8 |
-| "检查这篇论文的学术质量" | Phase 6 only |
-
-AI 判断原则：
-- 用户描述了具体方向但无锚点/理论框架 → Phase 1
-- 用户有方向框架但缺文献覆盖 → Phase 2
-- 用户明确提到"已有 related work/literature review" → 跳过 Phase 2
-- 用户明确提到"实验做完了有数据" → 跳过 Phase 3，从 Phase 4 或 5 开始
-- 纯理论/算法/形式化/思辨论文 → 自动跳过 Phase 3-4
-- 不确定时，问用户确认，不猜测
-
----
-
-## 首次使用：检查依赖
-
-```bash
-bash setup.sh
-```
-
-安装 ARS + Ralph Loop。
-
-**推荐 MCP 配置（增强 CS 文献覆盖）：**
-
-```bash
-# arXiv MCP：最新 preprint 搜索/下载/阅读
-claude mcp add arxiv --scope user -- npx -y --package arxiv-toolkit arxiv-mcp
-
-# Semantic Scholar MCP：引用图谱 + 推荐
-claude mcp add semantic-scholar --scope user -- uvx semantic-scholar-mcp
-
-# OpenAlex MCP：250M+ 论文广覆盖
-claude mcp add openalex --scope user -- npx openalex-mcp
-```
-
----
-
-## 工具箱
-
-| 工具 | 用途 | 安装方式 |
-|------|------|----------|
-| **Academic Research Skills** | 文献搜索 + 同行评审 | `bash setup.sh`（必须） |
-| **Ralph Loop** | 路由修订迭代 | `bash setup.sh`（必须） |
-| **arXiv MCP** | 最新 preprint 搜索/下载/阅读 | `claude mcp add ...`（推荐） |
-| **Semantic Scholar MCP** | 引用图谱/推荐/作者检索 | `claude mcp add ...`（推荐） |
-| **OpenAlex MCP** | 250M+ 论文广覆盖 | `claude mcp add ...`（可选） |
-| **PaperOrchestra**（灵感来源） | 5-agent drafting pipeline（本 skill Phase 5 已内联核心机制） | 无需单独安装 |
-
----
-
-## GPT Researcher 重新启用指南
-
-**状态：暂时搁置，非永久移除。** v1.0 演示中产生 100% 幻觉引用，v2.0 起默认不用。若未来 ARS deep-research 对特定领域覆盖不足或 GPT Researcher 升级改善引用准确性，可重新启用。
-
-**重新启用：**
-1. 确认安装：`pip list | grep gpt-researcher`
-2. Phase 2 切换搜索引擎为 GPT Researcher
-3. 搜索后务必跑 Phase 6 引用审计逐条验证
-
----
-
-## 适用 / 不适用
-
-**适用：** CS/STEM/社科/人文论文全流程、文献综述、系统综述/SoK、投稿前完整性审计、灰色文献搜集、技术报告
-
-**不适用：** 替代人工同行评审（顶会/顶刊最终决定）、需机构伦理审查的高度敏感研究
-
----
-
-## 质量原则
-
-1. **每阶段确认。** 用户说"继续"前不进入下一阶段
-2. **语境优先。** AI 找理论前必须先有语境锚点。禁止直接从抽象主题跳理论联想
-3. **范文后置。** 范文不进主生成流程。初稿完成后再对照校准
-4. **溯源清晰。** 所有数据点标注来源和可信度
-5. **因果克制。** 不加控制变量时不作因果断言
-6. **独立审计。** 关键检查不靠单一代理自审，多角色子 Agent 并行交叉验证
-7. **定向修复。** 评审发现按弱点路由表分发，不盲目重试
-8. **工具真实调用。** 不手动模拟工具行为，必须 invoke 对应 Skill
-9. **错误透明。** 工具调用失败报告具体错误，不假装成功
-10. **反幻觉。** 所有引用必须可验证、所有数字必须源自实验数据、所有图表必须忠实呈现
-
----
-
-## 概念来源
-
-| 概念 | 来源 |
-|------|------|
-| 迭代环 + 弱点路由表 + 质量关卡 | 陈德里 DeliAutoResearch (2026) |
-| 语境锚点法 | 孙宇凡 "AI赋能理论框架三步法" |
-| 范文后置校准 | 孙宇凡 "AI仿写顶刊四步法" |
-| CS/STEM 锚点扩展（survey/SoK）+ 贡献类型 | 社区贡献 |
-| 可组合文献数据库（arXiv/S2/OpenAlex MCP） | 社区贡献 |
-| 多代理独立审计 | Claude Code 多子 Agent 并行评审 |
-| Ralph Loop | Claude Code 官方插件 |
-| Devil's Advocate 让步门槛 | ARS v3.0 |
-| 四索引交叉核验 | ARS v3.11.0 |
-| 5-Agent Drafting + Refinement Loop + Halt Rules | PaperOrchestra (Song et al., arXiv:2604.05018, 2026) |
-| 5 句 Abstract 公式 | Farquhar (2024) |
-| AI 写作 5 类缺陷检测 | 社区实践总结 |
+> Gate 8 → 引用全部可验证（0 placeholder）、页数合规、模板正确、checklist 全通过、写作质量 5 类检查通过。
