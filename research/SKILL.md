@@ -73,11 +73,18 @@ Phase 8: 终稿格式化
 
 每个阶段的完整执行指令在 `pipeline.md`。执行到某阶段时 Read 对应段落。
 
-学科适配（锚点类型、评审标准、格式要求）在：
-- `cs.md` — CS/STEM 学科配置
-- `social-science.md` — 社科/人文学科配置
+### 学科自动识别
 
-执行 Phase 1 前，根据用户研究方向选择一个 domain 文件 Read。
+根据用户研究方向，AI 自动判断学科并 Read 对应 domain 文件。用户不需要手动指定。
+
+| 用户说了类似这样的话 | 判定 | Read |
+|------|------|------|
+| LLM、transformer、diffusion、RL、GPU、benchmark、NeurIPS/ICML/ACL 投稿、arxiv、github 开源 | CS/STEM | `cs.md` |
+| 招聘、政策、组织、文化、教育、不平等、历史、法律、社会现象 | 社科 | `social-science.md` |
+| 哲学、文学、艺术、思想史、批判理论 | 人文 | `social-science.md` |
+| 不确定 | 问用户："这是 CS 技术类研究还是社科/人文类研究？" | —— |
+
+**自动执行：** Read 对应 domain 文件后，严格按其中定义的锚点类型、跳过规则、评审标准、格式要求运行 pipeline。不跨 domain 混合规则。
 
 ---
 
