@@ -1,5 +1,5 @@
 ---
-name: research
+name: research-assistant-enzo
 description: Academic Research Assistant v5.0 — 8-phase iterative loop: problem anchoring & theory discovery → literature search → empirical design → data/figures → drafting (PaperOrchestra-style 5-agent) → peer review & template calibration → revision & delivery → final formatting. CS/STEM + social sciences + humanities. Flexible entry, AI judges starting point. Multi-agent independent audit for quality verification.
 ---
 

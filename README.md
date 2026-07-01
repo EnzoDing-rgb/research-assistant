@@ -2,12 +2,12 @@
 
 Claude Code 技能集合。包含两个独立技能：
 
-- **/research** — 全流程学术研究助手 v5.0（8 阶段迭代环 + PaperOrchestra 风格 5-agent 初稿撰写）
+- **/research-assistant-enzo** — 全流程学术研究助手 v5.0（8 阶段迭代环 + PaperOrchestra 风格 5-agent 初稿撰写）
 - **/learn** — AI 主导的技术概念教学（从问题动机出发，层层建立直觉，不留悬空概念）
 
 ---
 
-## /research
+## /research-assistant-enzo
 
 8 阶段学术研究管线。CS/STEM + 社科 + 人文全覆盖。
 
@@ -24,7 +24,7 @@ claude plugins marketplace add EnzoDing-rgb/research-assistant
 claude plugins install research-assistant@research-assistant
 ```
 
-安装后重启 Claude Code，输入 `/research` 即可调用。
+安装后重启 Claude Code，输入 `/research-assistant-enzo` 即可调用。
 
 **推荐配置 MCP 文献数据库（增强 CS 文献覆盖）：**
 

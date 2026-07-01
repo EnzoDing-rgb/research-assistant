@@ -108,4 +108,4 @@ else
     echo "  ○ GPT 5.4 未配置（将使用多角色子 Agent Fallback）"
 fi
 echo ""
-echo "启动研究: 在 Claude Code 中输入 '/research' + 你的研究问题。"
+echo "启动研究: 在 Claude Code 中输入 '/research-assistant-enzo' + 你的研究问题。"
