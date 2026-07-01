@@ -4,196 +4,203 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>效率反噬：AI编程工具对中国互联网工程师劳动过程的重构</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tufte-css@1.8.0/tufte.min.css">
 <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap');
+
   :root {
-    --text: #1a1a1a;
-    --muted: #555;
-    --link: #0969da;
-    --border: #e0e0e0;
-    --toc-bg: #fafafa;
-    --blockquote-border: #d0d0d0;
+    --body-font: "Noto Serif SC", "PingFang SC", "Hiragino Sans GB", "STSong", "Songti SC", serif;
+    --heading-font: "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Heiti SC", "STHeiti", sans-serif;
+    --mono-font: "JetBrains Mono", "SF Mono", "Cascadia Code", monospace;
+    --text-color: #111;
+    --bg-color: #fffff8;
+    --link-color: #0969da;
+    --border-color: #ddd;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
-    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
-    font-size: 17px;
-    line-height: 1.75;
-    color: var(--text);
-    background: #fff;
-    -webkit-font-smoothing: antialiased;
+    font-family: var(--body-font);
+    background: var(--bg-color);
+    color: var(--text-color);
   }
 
-  /* TOC sidebar */
-  nav#toc {
-    position: fixed;
-    left: 0; top: 0;
-    width: 240px;
-    height: 100vh;
-    overflow-y: auto;
-    padding: 32px 20px 32px 28px;
-    background: var(--toc-bg);
-    border-right: 1px solid var(--border);
-    font-size: 14px;
-    line-height: 1.6;
-    z-index: 10;
-  }
-  nav#toc h2 {
-    font-size: 15px;
-    font-weight: 700;
-    margin-bottom: 12px;
-    color: var(--text);
-  }
-  nav#toc ol { list-style: none; padding: 0; }
-  nav#toc ol ol { padding-left: 14px; }
-  nav#toc li { margin-bottom: 4px; }
-  nav#toc a {
-    color: var(--muted);
-    text-decoration: none;
-    transition: color .15s;
-  }
-  nav#toc a:hover, nav#toc a.active { color: var(--link); }
-
-  /* Main content */
-  main {
-    max-width: 860px;
-    margin-left: 260px;
-    padding: 48px 52px 80px 52px;
+  article {
+    max-width: 800px;
   }
 
+  /* Title area */
   h1 {
-    font-size: 28px;
-    font-weight: 800;
+    font-family: var(--heading-font);
+    font-weight: 700;
+    font-size: 1.8rem;
     line-height: 1.35;
-    margin-bottom: 8px;
+    text-align: center;
+    margin-top: 2rem;
   }
-  h2 {
-    font-size: 22px;
-    font-weight: 700;
-    margin: 48px 0 18px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--border);
-  }
-  h3 {
-    font-size: 18px;
-    font-weight: 700;
-    margin: 32px 0 12px;
-  }
-  p { margin: 0 0 14px; text-align: justify; }
 
-  /* Abstract */
-  .abstract {
-    margin: 20px 0 32px;
-    padding: 16px 20px;
-    border-left: 3px solid var(--border);
-    color: var(--muted);
-    font-size: 15.5px;
+  .author-block {
+    text-align: center;
+    margin: 1.5rem 0 2rem;
+    font-family: var(--heading-font);
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: #444;
   }
-  .keywords { font-size: 15px; color: var(--muted); margin-bottom: 36px; }
-  .keywords strong { color: var(--text); }
+  .author-block strong {
+    font-size: 1.05rem;
+    color: var(--text-color);
+  }
 
-  /* Figures & diagrams */
-  figure { margin: 24px 0; text-align: center; }
-  figure figcaption { font-size: 14px; color: var(--muted); margin-top: 8px; }
+  .abstract-block {
+    margin: 1.5rem 0 2.5rem;
+    padding: 1rem 1.2rem;
+    border-left: 3px solid #ccc;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: #444;
+  }
+  .abstract-block p { margin-bottom: 0.5rem; }
+  .keywords { font-size: 0.85rem; color: #666; }
+
+  /* Sections */
+  section { margin-top: 2rem; }
+  section > h2 {
+    font-family: var(--heading-font);
+    font-weight: 700;
+    font-size: 1.35rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.4rem;
+    margin-bottom: 1.2rem;
+  }
+  section > h3 {
+    font-family: var(--heading-font);
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.6rem;
+  }
+
+  p { margin-bottom: 0.8rem; text-align: justify; }
+
+  /* Diagrams */
+  figure { margin: 1.5rem 0; }
+  figure figcaption {
+    font-family: var(--heading-font);
+    font-size: 0.85rem;
+    color: #555;
+    margin-top: 0.4rem;
+  }
   .mermaid { display: flex; justify-content: center; }
 
   /* Blockquote */
   blockquote {
-    margin: 16px 0;
-    padding: 8px 0 8px 18px;
-    border-left: 3px solid var(--blockquote-border);
-    color: var(--muted);
-    font-style: italic;
+    margin: 1rem 0;
+    padding: 0.4rem 0 0.4rem 1.2rem;
+    border-left: 3px solid #ccc;
+    color: #555;
   }
+  blockquote p { font-style: italic; }
 
   /* Tables */
   table {
     width: 100%;
     border-collapse: collapse;
-    margin: 20px 0;
-    font-size: 15px;
+    margin: 1.2rem 0;
+    font-size: 0.9rem;
   }
   thead { border-top: 2px solid #333; border-bottom: 1px solid #333; }
   tbody { border-bottom: 2px solid #333; }
-  th, td { padding: 8px 12px; text-align: left; }
-  th { font-weight: 700; }
-  tr:not(thead tr):not(:last-child) { border-bottom: 1px solid var(--border); }
+  th, td { padding: 0.45rem 0.6rem; text-align: left; }
+  th { font-family: var(--heading-font); font-weight: 600; }
+  tr:not(:last-child) { border-bottom: 1px solid #eee; }
 
-  /* Footnotes */
-  .footnotes { font-size: 14px; color: var(--muted); border-top: 1px solid var(--border); padding-top: 20px; margin-top: 48px; }
-  .footnotes ol { padding-left: 20px; }
-  .footnotes li { margin-bottom: 6px; }
-  sup a { color: var(--link); text-decoration: none; font-size: 13px; }
+  /* Code / pre (tech stack diagram) */
+  pre {
+    background: #f8f8f8;
+    padding: 0.8rem 1rem;
+    font-family: var(--mono-font);
+    font-size: 0.8rem;
+    line-height: 1.45;
+    overflow-x: auto;
+    border-radius: 3px;
+  }
+
+  /* Lists */
+  ul, ol { margin: 0.6rem 0 1rem; padding-left: 1.5rem; }
+  li { margin-bottom: 0.35rem; }
+
+  /* Footnotes – tufte-css uses sidenotes, but for footnotes we use simple sup */
+  .fn { font-size: 0.8rem; color: var(--link-color); text-decoration: none; }
+  .fn:hover { text-decoration: underline; }
+
+  .footnotes-block {
+    margin-top: 3rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.8rem;
+    color: #555;
+    line-height: 1.6;
+  }
+  .footnotes-block ol { padding-left: 1.2rem; }
+  .footnotes-block li { margin-bottom: 0.4rem; }
 
   /* Refs */
-  .references { font-size: 14.5px; line-height: 1.65; }
-  .references p { margin-bottom: 6px; text-align: left; padding-left: 18px; text-indent: -18px; }
-
-  /* Responsive */
-  @media (max-width: 860px) {
-    nav#toc { display: none; }
-    main { margin-left: 0; padding: 24px 18px 48px; }
-    h1 { font-size: 22px; }
-    h2 { font-size: 19px; }
+  .refs-block {
+    margin-top: 1.5rem;
+    font-size: 0.82rem;
+    line-height: 1.65;
   }
+  .refs-block p {
+    margin-bottom: 0.35rem;
+    padding-left: 1.2rem;
+    text-indent: -1.2rem;
+  }
+
+  /* Margin notes (tufte feature) */
+  .sidenote, .marginnote {
+    font-family: var(--heading-font);
+    font-size: 0.78rem;
+    color: #555;
+  }
+
+  /* Print */
   @media print {
-    nav#toc { display: none; }
-    main { margin-left: 0; padding: 0; max-width: 100%; }
-    body { font-size: 12pt; line-height: 1.6; }
+    body { font-size: 11pt; }
+    article { max-width: 100%; }
+    @page { margin: 2.5cm 2cm; size: A4; }
+  }
+
+  /* Mobile */
+  @media (max-width: 760px) {
+    article { padding: 0 1rem; }
+    h1 { font-size: 1.4rem; }
+    section > h2 { font-size: 1.15rem; }
   }
 </style>
 </head>
 <body>
 
-<nav id="toc">
-  <h2>目录</h2>
-  <ol>
-    <li><a href="#abstract">摘要</a></li>
-    <li><a href="#structure">论文结构</a></li>
-    <li><a href="#intro">引言</a></li>
-    <li><a href="#ch1">第一章 前人知识的凝结</a></li>
-    <li><a href="#ch2">第二章 技能相对贬值</a>
-      <ol>
-        <li><a href="#ch2-1">2.1 劳动力再生产的成本在下降</a></li>
-        <li><a href="#ch2-2">2.2 贬值发生在整个技术栈上</a></li>
-        <li><a href="#ch2-3">2.3 经验证据</a></li>
-      </ol>
-    </li>
-    <li><a href="#ch3">第三章 控制权转移</a>
-      <ol>
-        <li><a href="#ch3-1">3.1 阿里的Token考核</a></li>
-        <li><a href="#ch3-2">3.2 行业扩散</a></li>
-        <li><a href="#ch3-3">3.3 理论定位</a></li>
-      </ol>
-    </li>
-    <li><a href="#ch4">第四章 越高效越累</a>
-      <ol>
-        <li><a href="#ch4-1">4.1 概念澄清</a></li>
-        <li><a href="#ch4-2">4.2 效率被吸收为新基线</a></li>
-        <li><a href="#ch4-3">4.3 双重强化</a></li>
-      </ol>
-    </li>
-    <li><a href="#ch5">第五章 闭合循环</a></li>
-    <li><a href="#conclusion">结论：反思与启发</a></li>
-    <li><a href="#refs">参考文献</a></li>
-  </ol>
-</nav>
-
-<main>
+<article>
 
 <h1>效率反噬：AI编程工具对中国互联网工程师劳动过程的重构</h1>
 
-<div class="abstract" id="abstract">
-<p>2026年，中国互联网大厂正在经历一场由AI编程工具引发的劳动过程深刻重构。阿里巴巴将核心考核指标从日活用户数更换为Token消耗量，腾讯内部公布Token消耗排名，小米大模型负责人公开表示"每天AI对话少于100次的人可以辞职"——这些分散的公司决策背后，隐藏着一个共同的逻辑：当AI工具大幅提升了工程师的个体产出效率，效率提升的果实没有转化为闲暇或更高的工资，而是被管理层立即吸收为更高的产出要求。本文以2026年中国互联网大厂的Token KPI考核体系为核心经验材料，运用马克思劳动过程理论的分析框架，论证一个五环因果链：AI编程工具作为前人编程知识的集体凝结（第一环），降低了"写出能用的代码"所需的学习投入，导致个体工程师的技能相对贬值（第二环）；技能贬值削弱了劳动者的议价能力，劳动过程的控制权向资本方倾斜（第三环）；控制权在手，AI的效率提升立即被转化为更高的产出要求，劳动者陷入"越高效越累"的悖论（第四环）；而工程师在考核压力下开发的内部AI工具，进一步覆盖自己和他人的技能，形成一个自我加速的闭合循环（第五环）。本文的贡献在于：将去技能化与劳动强化这两个通常被分开论述的机制，联结为一套因果循环，并以2026年Token KPI这一尚未被学术文献系统分析的新现象为经验锚点，展示马克思劳动过程理论对当代知识密集型行业仍具有强大的解释力。</p>
+<div class="author-block">
+  <strong>丁冯德</strong><br>
+  国家安全学（计算机技术方向）博士研究生<br>
+  学号：20251402002
 </div>
 
-<p class="keywords"><strong>关键词：</strong>AI编程工具；劳动过程；去技能化；Token KPI；相对剩余价值</p>
+<div class="abstract-block">
+  <p><strong>摘要：</strong>2026年，中国互联网大厂正在经历一场由AI编程工具引发的劳动过程深刻重构。阿里巴巴将核心考核指标从日活用户数更换为Token消耗量，腾讯内部公布Token消耗排名，小米大模型负责人公开表示"每天AI对话少于100次的人可以辞职"——这些分散的公司决策背后，隐藏着一个共同的逻辑：当AI工具大幅提升了工程师的个体产出效率，效率提升的果实没有转化为闲暇或更高的工资，而是被管理层立即吸收为更高的产出要求。本文以2026年中国互联网大厂的Token KPI考核体系为核心经验材料，运用马克思劳动过程理论的分析框架，论证一个五环因果链：AI编程工具作为前人编程知识的集体凝结（第一环），降低了"写出能用的代码"所需的学习投入，导致个体工程师的技能相对贬值（第二环）；技能贬值削弱了劳动者的议价能力，劳动过程的控制权向资本方倾斜（第三环）；控制权在手，AI的效率提升立即被转化为更高的产出要求，劳动者陷入"越高效越累"的悖论（第四环）；而工程师在考核压力下开发的内部AI工具，进一步覆盖自己和他人的技能，形成一个自我加速的闭合循环（第五环）。</p>
+  <p class="keywords"><strong>关键词：</strong>AI编程工具；劳动过程；去技能化；Token KPI；相对剩余价值</p>
+</div>
 
-<hr style="border:none;border-top:1px solid var(--border);margin:28px 0;">
+<hr style="border:none;border-top:1px solid #eee;margin:1.5rem 0;">
 
-<!-- Paper structure diagram -->
-<h2 id="structure">论文结构</h2>
+<!-- Paper structure -->
+<section>
+<h2>论文结构</h2>
 <figure>
   <pre class="mermaid">
 graph LR
@@ -212,12 +219,15 @@ graph LR
     style F fill:#e8f0fe,stroke:#1967d2
   </pre>
 </figure>
+</section>
 
-<hr style="border:none;border-top:1px solid var(--border);margin:28px 0;">
+<hr style="border:none;border-top:1px solid #eee;margin:1.5rem 0;">
 
-<h2 id="intro">引言</h2>
+<!-- Introduction -->
+<section>
+<h2>引言</h2>
 
-<p>2026年3月16日，阿里巴巴集团CEO吴泳铭亲自挂帅，成立了ATH（Alibaba Token Hub）事业群。<sup><a href="#fn1" id="fnref1">1</a></sup> 这不仅是阿里历史上规模最大的一次AI业务整合——通义实验室、MaaS业务线、千问事业部等五大事业群全部并入，更引人注目的是它的考核逻辑：核心指标从日活用户数（DAU）直接更换为Token消耗量。模型效果的评估、用户体验的衡量，全部折算为Token调用量。员工的Token消耗被做成排行榜，排名直接与绩效评级、转正、晋升挂钩。</p>
+<p>2026年3月16日，阿里巴巴集团CEO吴泳铭亲自挂帅，成立了ATH（Alibaba Token Hub）事业群。<a class="fn" href="#fn1" id="fnref1">[1]</a> 这不仅是阿里历史上规模最大的一次AI业务整合——通义实验室、MaaS业务线、千问事业部等五大事业群全部并入，更引人注目的是它的考核逻辑：核心指标从日活用户数（DAU）直接更换为Token消耗量。模型效果的评估、用户体验的衡量，全部折算为Token调用量。员工的Token消耗被做成排行榜，排名直接与绩效评级、转正、晋升挂钩。</p>
 
 <p>这不是阿里的孤立行为。2026年上半年，中国互联网行业出现了一股将AI Token消耗量纳入工程师绩效考核的浪潮。腾讯内部公布Token消耗排名（后在6月初因"焦虑式管理"争议而取消）。小米大模型负责人罗福莉公开表示"团队中每天AI对话次数少于100次的成员可以辞职"。58同城董事长姚劲波要求"Token用得越多越好，不计成本"。网易推行AI工具聚合平台，以员工的积分消耗情况判断AI使用频率，积分低的被约谈。昆仑万维强制技术序列全员使用AI编程工具，开发效率须提高至少50%，未达标者面临5%至20%的末位淘汰。</p>
 
@@ -232,28 +242,34 @@ graph LR
 <p>关于AI对劳动过程的影响，已有研究为我们提供了重要的出发点。马克思在《资本论》中对机器和大工业的分析（1867）以及Braverman对"去技能化"的系统论证（1974）构成了经典基础。在当代文献中，Steinhoff（2024）提出了机器学习"涌现式吸收"技能的新机制，Zhang（2026）和《学习与实践》（2026）分析了AI如何同时强化相对剩余价值和绝对剩余价值的生产，Chauhan（2026）提供了软件工程中去技能化的跨国经验证据，韩文龙等人（2025）从生产力三要素的视角分析了AI对劳动过程的四重变革向度，金华等人（2025）提出了知识密集型行业中"知识技能空心化"的本土概念。这些研究分别在去技能化、剩余价值生产、算法管理和劳动过程变革等维度做出了贡献，但它们通常将"技能贬值"和"劳动强化"作为两个独立机制来处理，尚未系统论证两者之间的因果关系。本文试图填补这个缺口：不是分别讨论技能贬值和劳动强化，而是论证前者如何导致了后者，并形成一个自我加速的闭合循环。</p>
 
 <p>本文讨论的是AI编程工具对工程师劳动<b>过程</b>的影响——即"怎么干活、谁决定怎么干活、效率提升的果实归谁"的问题。本文不直接回答"AI会不会导致程序员大面积失业"的就业总量问题，也不涉及AI芯片、底层编译器或训练框架等基础设施层面的技术分析。本文的经验材料主要来自中国互联网行业，以阿里巴巴为深度案例。选择阿里巴巴，是因为它在本轮Token KPI浪潮中动作最大、组织调整最激进——成立了专门的ATH事业群、由集团CEO亲自挂帅、将核心考核指标从DAU直接替换为Token消耗量。这些特征使其成为观察AI时代劳动过程控制权转移的"极端案例"，适合用于揭示机制，而非代表行业的普遍状况。部分国际案例用作比较参照。</p>
+</section>
 
-<h2 id="ch1">第一章 前人知识的凝结：AI编程工具从何而来</h2>
+<!-- Chapter 1 -->
+<section>
+<h2>第一章 前人知识的凝结：AI编程工具从何而来</h2>
 
-<p>在分析AI编程工具对工程师的影响之前，必须首先澄清一个经常被忽略的前提：这些工具不是凭空出现的。今天能够自动生成代码的大语言模型——无论是Anthropic的Claude、OpenAI的Codex，还是中国本土的通义灵码、DeepSeek Coder——它们的训练数据来自全球程序员在过去几十年中公开发布的海量代码、技术文档、问答讨论和学术论文。Stack Overflow上数以百万计的问答、GitHub上数以亿计的代码提交、各大学术会议上发表的算法论文——这些是人类程序员集体智力劳动的产物。AI编程工具的"能力"，本质上是这些前人劳动成果被模型"吸收"后的重新释放。</p>
+<p>在分析AI编程工具对工程师的影响之前，必须首先澄清一个经常被忽略的前提：这些工具不是凭空出现的。今天能够自动生成代码的大语言模型——它们的训练数据来自全球程序员在过去几十年中公开发布的海量代码、技术文档、问答讨论和学术论文。Stack Overflow上数以百万计的问答、GitHub上数以亿计的代码提交、各大学术会议上发表的算法论文——这些是人类程序员集体智力劳动的产物。AI编程工具的"能力"，本质上是这些前人劳动成果被模型"吸收"后的重新释放。</p>
 
 <p>马克思在《资本论》第一卷中分析机器的本质时，提出了一个对于理解AI至关重要的观点：机器并非自然界现成的东西，而是人类过去劳动的对象化。工人用时间和技能制造出机器，机器凝结了这些劳动。但在资本主义生产关系下，这些对象化的劳动成果不属于制造它的工人，而是被资本占用，并反过来被用于规定活着的工人如何劳动。马克思将机器称为"不变资本"——不变，是因为它只能转移自身的价值到产品中，不能创造超过自身价值的新价值；只有活人的劳动（"可变资本"）才能创造新价值。但这个概念同时也揭示了另一层关系：前人劳动一旦被凝结为机器，就不再受前人的控制，而成为支配后人的力量。</p>
 
 <p>Braverman（1974）在《劳动与垄断资本》中把马克思的这个框架发展成了一套系统的"去技能化"命题。他的核心洞察是：在资本主义劳动过程中，存在着一种将"概念"与"执行"分离的系统趋势——前者集中于管理层，后者分配给被去技能化的工人。这个趋势的动力不是管理者的"恶意"，而是资本控制劳动过程的结构性需要：只要工人还掌握着不可替代的技能知识，他们就保留了议价权；把技能从工人身上抽走并嵌入到机器和管理流程中，就等于剥夺了这种议价权。Foster（2024）在Braverman著作五十周年的回顾文章中论证，这个分析框架对于理解AI时代的劳动过程仍然有效——甚至更加有效，因为AI吸收技能的规模和速度远超历史上的任何技术。</p>
 
-<p>Steinhoff（2024）在《Work in the Global Economy》上对Marx→Braverman的框架做了一次重要的当代化推进。他提出，去技能化（deskilling）不仅是把技能从工人身上抽走，更是把这些技能<b>实现在机器之中</b>——他称这个过程为"吸收"。在马克思的时代，吸收需要"编码"：你必须能把一种技能翻译成明确的规则，才能嵌入机器（就像泰勒制把工人的操作分解为标准动作）。但2015年之后的机器学习改变了这一点。模型不需要任何人把"怎么写代码"翻译成规则——它从海量示例中自行提取模式和规律。Steinhoff称之为"涌现式吸收"：吸收不再依赖知识编码，能力的获取范围因此大大扩展。</p>
+<p>Steinhoff（2024）在《Work in the Global Economy》上对Marx→Braverman的框架做了一次重要的当代化推进。他提出，去技能化不仅是把技能从工人身上抽走，更是把这些技能<b>实现在机器之中</b>——他称这个过程为"吸收"。在马克思的时代，吸收需要"编码"：你必须能把一种技能翻译成明确的规则，才能嵌入机器（就像泰勒制把工人的操作分解为标准动作）。但2015年之后的机器学习改变了这一点。模型不需要任何人把"怎么写代码"翻译成规则——它从海量示例中自行提取模式和规律。Steinhoff称之为"涌现式吸收"：吸收不再依赖知识编码，能力的获取范围因此大大扩展。</p>
 
 <p>AI编程工具正是"涌现式吸收"的典型案例。它们不需要任何人写出"生成一个排序函数的规则"——它们从数以百万计的排序函数实现中，自己学到了什么是一个合理的排序函数。它们不需要被教授"如何在Python中连接数据库"——它们读过了足够多的数据库连接代码，可以直接生成可行的实现。</p>
 
-<p>这一机制的覆盖范围不限于简单的业务逻辑。在2026年的技术实践中，AI代码生成已经从最初的应用层（写一个网页、拼接一个API）向上扩展到了基础设施层。曾经需要具备多年系统编程经验的CUDA算子编写、分布式训练脚本配置、编译器优化等工作，AI工具正在逐步覆盖。不同层级的编程活动——从业务代码到底层优化——对应着工程师在不同学习阶段积累的不同类型的知识，而现在AI在每一层都能生成至少"看起来可用"的结果。</p>
+<p>这一机制的覆盖范围不限于简单的业务逻辑。在2026年的技术实践中，AI代码生成已经从最初的应用层（写一个网页、拼接一个API）向上扩展到了基础设施层。曾经需要具备多年系统编程经验的底层开发和系统优化等工作，AI工具正在逐步覆盖。不同层级的编程活动——从业务代码到底层优化——对应着工程师在不同学习阶段积累的不同类型的知识，而现在AI在每一层都能生成至少"看起来可用"的结果。</p>
 
-<p>这不是说AI写的代码质量已经超过了人类专家。而是说：AI工具的存在，从根本上改变了"会写这段代码"这件事的稀缺性。而这正是下一章要讨论的问题。</p>
+<p>这不是说AI写的代码质量已经超过了人类专家。而是说：AI工具的存在，从根本上改变了"会写这段代码"这件事的稀缺性。</p>
+</section>
 
-<h2 id="ch2">第二章 技能相对贬值：当"会写代码"不再是稀缺筹码</h2>
+<!-- Chapter 2 -->
+<section>
+<h2>第二章 技能相对贬值：当"会写代码"不再是稀缺筹码</h2>
 
 <p>上一章论证了AI编程工具是如何产生的——它们是前人编程知识的集体凝结。这一章要讨论这个事实的直接后果：当过去积累的编程知识被模型大规模吸收后，当下每个程序员所拥有的个人技能，在劳动力市场上的相对价值会发生什么变化。</p>
 
-<h3 id="ch2-1">2.1 劳动力再生产的成本在下降</h3>
+<h3>2.1 劳动力再生产的成本在下降</h3>
 
 <p>马克思分析劳动力价值（工资的底线）时，采用的不是"这个人有多厉害"的主观判断，而是一个客观标准：<b>劳动力再生产</b>需要多少社会必要劳动时间。简单地说：把一个完全没有编程能力的人，培养到能够胜任一份编程工作所需要的水平，需要花多长时间、消耗多少资源？这个成本决定了劳动力价值的基础——低于这个成本，就没有人愿意（或能够）进入这个行业。</p>
 
@@ -261,7 +277,7 @@ graph LR
 
 <p>这不等于"任何人都能做程序员了"。但它意味着：做出"基本可用的代码"这件事，所需的学习投入在大幅下降。而按照马克思的逻辑，劳动力再生产的成本在下降，意味着劳动力价值的基础在承压——在市场上，"会写代码"这件事不再能要到和以前一样的价格。</p>
 
-<h3 id="ch2-2">2.2 贬值发生在整个技术栈上</h3>
+<h3>2.2 贬值发生在整个技术栈上</h3>
 
 <p>这里需要避免一个常见的误解：技能贬值不是只在"简单编程"的层面发生。如果我们把编程这个职业所涉及的技术能力，从底层到应用层做一个简化的层次划分，大致是这样的：</p>
 
@@ -273,15 +289,16 @@ graph LR
 ├──────────────────────────────────┤
 │  系统层  │  性能优化、并发、分布式    │  AI建议 + 人做决策
 ├──────────────────────────────────┤
-│  底层   │  CUDA、编译器、驱动        │  开始被AI渗透
+│  底层   │  底层开发、编译优化、驱动   │  开始被AI渗透
 └──────────────────────────────────┘</code></pre>
+  <figcaption>图1：编程技术栈各层次与AI渗透程度</figcaption>
 </figure>
 
 <p>越往上的层次，AI的覆盖率越高——应用层代码的70-90%已经可以由AI生成（谷歌2026年宣布75%新增代码由AI生成，中国大厂的数据与这一水平接近）。越往下的层次，人类的判断和审查仍然不可或缺，但AI生成的"初稿"正在降低这些层次的工作门槛。关键不在于AI在哪一层"比人强"，而在于：在<b>每一层</b>，"能做这件事"的稀缺性都在下降。不同的只是下降的速度和幅度。</p>
 
-<h3 id="ch2-3">2.3 经验证据</h3>
+<h3>2.3 经验证据</h3>
 
-<p>Chauhan（2026）在《Socio-Economic Review》上发表了一项与本文主题高度相关的实证研究。她深度访谈了70名印度和美国的软件工程师，得出的结论是：大多数AI自动化工具即使在高技能行业的软件工程中也产生了去技能化效果。她特别指出，离岸外包工人（offshore workers）被去技能化的程度远超在岸工人，而且自动化有时先将在岸工作去技能化，使其变得更标准化、更容易被离岸外包——形成了一个两阶段的替代链条。</p>
+<p>Chauhan（2026）在《Socio-Economic Review》上发表了一项与本文主题高度相关的实证研究。她深度访谈了70名印度和美国的软件工程师，得出的结论是：大多数AI自动化工具即使在高技能行业的软件工程中也产生了去技能化效果。她特别指出，离岸外包工人被去技能化的程度远超在岸工人，而且自动化有时先将在岸工作去技能化，使其变得更标准化、更容易被离岸外包——形成了一个两阶段的替代链条。</p>
 
 <p>在中国互联网行业，技能贬值的表现方式有所不同，但逻辑一致。2026年上半年，传统前端岗位几乎消失——不是前端工作不需要做了，而是AI工具使后端工程师也能生成前端页面，专门的前端技能不再构成独立岗位的壁垒。阿里的招聘取消后端方向，统一为"AI全栈工程师"——这不是岗位升级，是岗位融合：当AI可以弥合前后端之间的技能差距，企业就不再需要为每种技能单独设立岗位。</p>
 
@@ -289,13 +306,16 @@ graph LR
 
 <p>对于上述分析，一个值得认真对待的反论是：AI工具在替代常规编码能力的同时，也在创造新的高技能需求——比如系统架构设计、AI治理、跨领域的"问题定义"能力。如果这些新技能的市场溢价超过了旧技能的贬值幅度，那么本文的"技能贬值"判断就可能只是描述了硬币的一面，而忽略了另一面。</p>
 
-<p>这个反论在经验上有一定依据。2026年上半年，中国大厂的AI算法岗薪资确实在持续攀升，AI方向硕士起薪是传统技术岗的1.4倍以上。但这里的关键在于：技能溢价集中在少数顶层岗位（算法研究员、AI系统架构师），而技能贬值分布在多数中间层岗位（前端开发、常规后端、基础测试）。这不是"一半贬值一半升值"的对称格局——升值发生在金字塔尖，贬值发生在金字塔身和底座。用马克思的框架来看，这不构成对去技能化的反驳，而是进一步印证了劳动力市场的"极化"趋势：少数人获得技能溢价，多数人经历技能贬值。这种极化本身就是资本主义技术应用的非对称后果——Babbage原则在AI时代的体现：技术让部分高技能劳动的稀缺性进一步上升，但让大部分常规技能劳动的稀缺性进一步下降。</p>
+<p>这个反论在经验上有一定依据。2026年上半年，中国大厂的AI算法岗薪资确实在持续攀升，AI方向硕士起薪是传统技术岗的1.4倍以上。但这里的关键在于：技能溢价集中在少数顶层岗位（算法研究员、AI系统架构师），而技能贬值分布在多数中间层岗位（前端开发、常规后端、基础测试）。这不是"一半贬值一半升值"的对称格局——升值发生在金字塔尖，贬值发生在金字塔身和底座。用马克思的框架来看，这不构成对去技能化的反驳，而是进一步印证了劳动力市场的"极化"趋势：少数人获得技能溢价，多数人经历技能贬值。这种极化本身就是资本主义技术应用的非对称后果。</p>
+</section>
 
-<h2 id="ch3">第三章 控制权转移：Token KPI作为劳动纪律装置</h2>
+<!-- Chapter 3 -->
+<section>
+<h2>第三章 控制权转移：Token KPI作为劳动纪律装置</h2>
 
 <p>前两章论证了一个递进关系：AI编程工具是前人集体劳动成果的凝结（第一章）→ 这种凝结降低了个体技能的市场稀缺性（第二章）。这个因果关系为本章的分析铺设了基础：当个人技能不再构成不可替代的筹码时，劳动过程中"怎么干活"的决定权，就开始从劳动者向雇主倾斜。</p>
 
-<h3 id="ch3-1">3.1 阿里的Token考核：一个标志性事件</h3>
+<h3>3.1 阿里的Token考核：一个标志性事件</h3>
 
 <p>回到引言中提到的阿里ATH事业群。将核心考核指标从DAU换成Token消耗量，这个决策看起来只是一个KPI调整。但放在马克思劳动过程理论的分析框架中，它标志着劳动控制逻辑的一次关键转换。</p>
 
@@ -307,7 +327,7 @@ graph LR
 
 <p>这个替代解释在个别公司的实践中确实能找到佐证——腾讯的Token排名上线后仅两个月就被叫停，说明管理层自己也没想清楚。但动机判断（管理层是"故意的"还是"无意的"）不应替代效果判断。无论最初的动机是什么，Token KPI在<b>客观效果</b>上产生了三个后果：它将技术采纳从个人选择变成了组织强制，它将"用了多少AI"从不可见的行为变成了可排名的数据，它让"怎么干活"的决定权从劳动者手中转移到了管理层设定的指标体系之中。阿里ATH事业群的设立——由集团CEO亲自挂帅、将DAU替换为Token消耗量——很难被仅仅解释为"不知道该怎么衡量"。这更接近一个有意识的、系统性的劳动控制基础设施的搭建。</p>
 
-<h3 id="ch3-2">3.2 行业扩散</h3>
+<h3>3.2 行业扩散</h3>
 
 <p>2026年上半年，类似的逻辑在全行业扩散。这些管理措施的细节各不相同，但共享一个原则：用AI工具的用量来量化工程师的劳动投入，用量化结果来排序和考核：</p>
 
@@ -319,19 +339,22 @@ graph LR
 
 <p>这些管理工具共享一个深层结构：它们将"技术采纳"从个体的自主选择，转变为组织层面的强制要求。它们将"用了多少AI"从不可见的个人习惯，转化为可视化、可比较、可排名的数据。在表面上，它们是在推广新技术；在实质上，它们是在用新技术来建立对劳动投入的新的监控机制。</p>
 
-<h3 id="ch3-3">3.3 理论定位：算法管理的新对象</h3>
+<h3>3.3 理论定位：算法管理的新对象</h3>
 
 <p>Wood（2026）在《Sociology》上分析算法管理时，提出了一个有助于定位Token KPI的框架。他认为，当代的算法管理系统不应该被视为一种全新的控制形态——它在本质上延续了1980年代以来"柔性专制"的控制逻辑，只是通过数字技术获得了更细的颗粒度。他引用的数据表明，约三分之二的美国工人经历过某种形式的电子监控，近一半有自动化系统安排其工作内容。</p>
 
-<p>现有的算法管理研究主要聚焦于两类劳动者：物流仓储工人（以Amazon仓库为典型）和平台零工（以Uber司机和外卖骑手为典型）。Token KPI的不同之处在于，它把同一套逻辑应用到了一种传统上被认为拥有较高自主权的劳动群体——软件工程师身上。工程师曾经被（也被自己）视为"手艺人"——工作质量不能简化为数量指标，创造性工作不能计件。Token KPI打破了这种自我认知。它用一条简单粗暴的指标——你烧了多少Token——来代表你的"先进性"和"投入度"。</p>
+<p>现有的算法管理研究主要聚焦于两类劳动者：物流仓储工人（以Amazon仓库为典型）和平台零工（以Uber司机和外卖骑手为典型）。Token KPI的不同之处在于，它把同一套逻辑应用到了一种传统上被认为拥有较高自主权的劳动群体——软件工程师身上。工程师曾经被（也被自己）视为"手艺人"——工作质量不能简化为数量指标，创造性工作不能计件。Token KPI打破了这种自我认知。它用一条指标——你烧了多少Token——来代表你的"先进性"和"投入度"。</p>
 
 <p>这引出了一个被忽视的问题：当考核指标从"产出了什么"变成"用了什么工具"，管理的目的和管理的手段发生了倒置。Token消耗本身只是成本，并不是价值。多个公司的实践都出现了形式主义的问题：员工为了达标，安排AI Agent执行无意义的大批量任务、让AI续写没有实际用途的长文本、故意拉长对话上下文以增加Token计数。全球企业级AI应用中，近半数Token消耗被评估为无效浪费。但问题不在于"有人钻空子"——所有的考核指标都会被博弈，关键在于：当一个指标可以被系统性操纵而管理层仍然坚持使用它，说明这个指标真正的功能可能不在于衡量产出，而在于维持一种<b>你必须用AI</b>的强制性信号。</p>
+</section>
 
-<h2 id="ch4">第四章 越高效越累：效率提升的果实归谁</h2>
+<!-- Chapter 4 -->
+<section>
+<h2>第四章 越高效越累：效率提升的果实归谁</h2>
 
 <p>前三章论证了：AI工具吸收并重新释放了前人的编程知识 → 个体技能相对贬值 → 劳动过程控制权转移。本章要回答的是这个链条中最多人不理解的一环：既然AI让一个人能干三个人的活了，为什么人反而更累了？效率提升去哪了？</p>
 
-<h3 id="ch4-1">4.1 一个需要澄清的概念问题</h3>
+<h3>4.1 一个需要澄清的概念问题</h3>
 
 <p>日常语言中的"价值"和马克思分析框架中的"价值"是两个东西。日常说"我的价值"指的是"我重不重要""我多厉害""我有多不可替代"。但马克思用"剩余价值"这个概念，指的是工人在生产过程中创造的、超出了自己工资的那部分产出——被资本家无偿拿走的那块。当他讨论"相对剩余价值"时，他在问：资本家如何在不直接延长工作时间的情况下，扩大被拿走的那块的比例？答案是：用技术让工人在同样时间内产出更多，但工资不涨。</p>
 
@@ -339,7 +362,7 @@ graph LR
 
 <p>所以，"产生了更多相对剩余价值"不等于"工人变得更重要了"——恰恰相反。它意味着工人产出的更大比例被资本拿走了。在本文讨论的语境中：AI让一个工程师一天能完成过去三天的产出，但他的工资没有翻三倍——因为第二章分析过的去技能化效应，在劳动力市场上系统性地压低了他的议价能力。产出和工资之间的"剪刀差"扩大了。那个扩大的缺口，就是相对剩余价值增加的量化表达。</p>
 
-<h3 id="ch4-2">4.2 效率提升被吸收为新的产出基线</h3>
+<h3>4.2 效率提升被吸收为新的产出基线</h3>
 
 <p>当劳动者保留着对劳动过程的控制权时，效率提升可能转化为更短的工作日、更宽松的节奏。当控制权在资本一方时，效率提升立即被吸收为新的产出基线——原来三天做完的需求，现在期待半天完成；剩下两天半用来做更多需求。</p>
 
@@ -347,7 +370,7 @@ graph LR
 
 <p>这个悖论不是个人心理层面的焦虑，而是一个结构性的处境。在Token KPI体系下，管理层从工程师的AI使用数据中，实时获得了"这个人极限产出能力"的信息——AI工具不仅辅助了生产，也辅助了对生产者能力的监控和校准。"正常工作量"不再由工作任务本身的客观需求来定义，而是由AI辅助下的最大可能产出来定义。这就是为什么效率提升没有转化为闲暇：闲暇预设了"工作已经做完了"的边界，但当工作量是动态校准的——你越快，就给你越多——这条边界就不存在了。</p>
 
-<h3 id="ch4-3">4.3 理论定位：双重强化</h3>
+<h3>4.3 理论定位：双重强化</h3>
 
 <p>发表于《学习与实践》2026年第5期的一篇论文（题为"人工智能时代的劳动价值论重释"，属教育部哲学社会科学重大课题"人工智能背景下马克思劳动价值论时代化研究"的阶段性成果）提出了一个有助于系统化理解上述现象的分析框架："双重强化"。AI同时强化了两种剩余价值生产方式——</p>
 
@@ -358,8 +381,11 @@ graph LR
 <p>Rohde（2026）在arXiv预印本中引入的"能力伪装"概念，为这个分析增加了一个关键的补充。他指出，AI生成的高质量产出制造了"组织能力已被成功替代"的假象——代码可以被自动生成、测试可以自动运行、部署可以无人化。但这层表面能力下面，仍然需要少数深层次理解系统的人进行持续的代码审查、架构决策、安全判断和隐性维护。当管理层基于"代码生成率90%了还养那么多人干什么"的判断压缩团队规模时，这些隐性工作并不会消失——它们被以更高的强度分摊到剩下的工程师身上。</p>
 
 <p>这就是效率反噬的完整逻辑。AI让每个人产出更多，但更多产出并没有变成更多工资或更多自由；它变成了管理层的更多期待、更高产出基线、更少的团队人数、以及剩下的每个人更重的隐性劳动负担。</p>
+</section>
 
-<h2 id="ch5">第五章 闭合循环：工程师在加速自己的技能贬值</h2>
+<!-- Chapter 5 -->
+<section>
+<h2>第五章 闭合循环：工程师在加速自己的技能贬值</h2>
 
 <p>前面四章论证了一条从"前人知识凝结"到"越高效越累"的线性因果链。但是，如果这个链条只走一遍就停下来，它的影响是有限的。本章要论证的是：这个链条不是线性的，它形成一个闭合循环。而促使循环持续转动的，恰恰是工程师自己——在现有的考核逻辑下，每个理性个体的最优选择，都在为下一轮循环添加燃料。</p>
 
@@ -388,8 +414,11 @@ graph LR
 <p>这个闭合循环将如何进入下一圈——已经可以预见。随着中国市场对"会写代码"这项技能的评价基准持续下调，工程师的劳动力市场议价能力将进一步削弱。企业将有更强的动力压缩正式编制、使用外包和AI工具的组合来替代全职工程师。而随着AI工具能力的持续提升（每一代新模型的代码生成能力都比上一代更强，因为每一代新模型都吸收了这一代工程师的更多劳动成果），下一圈循环将从更高的起点开始：更多前人知识凝结在模型中，更低的培训成本，更弱的议价能力，更高的Token KPI基线。</p>
 
 <p>Xu和Jia（2026）所描述的"结构性技能形成阻断"——大厂不招新人、不续签、不提供成长通道——在这一循环中的角色是双重的。它一方面是循环的结果（管理层不再需要培养新人，因为AI弥合了经验差距），另一方面也是循环的加速器（当新一代工程师无法通过实际项目积累经验，他们的技能基础更加薄弱，对AI工具的依赖也就更深）。</p>
+</section>
 
-<h2 id="conclusion">结论：反思与启发</h2>
+<!-- Conclusion -->
+<section>
+<h2>结论：反思与启发</h2>
 
 <p>本文以2026年中国互联网大厂的Token KPI考核体系为核心经验材料，运用马克思劳动过程理论的框架，论证了一个五环因果循环：AI编程工具是前人编程知识的集体凝结（第一环），它降低了个体工程师技能的市场稀缺性（第二环），削弱了劳动者对劳动过程的议价能力，使控制权向资本方转移，Token KPI成为实质从属的当代技术实现形式（第三环），控制权在手，效率提升立即被吸收为更高的产出要求，效率悖论由此产生（第四环），而工程师在考核压力下"先用了再说"的个体理性行为，加速了整个职业群体的技能贬值，形成闭合循环（第五环）。</p>
 
@@ -397,7 +426,7 @@ graph LR
 
 <p>本文的贡献不在于提出新的理论概念，而在于将两个通常在学术文献中被分开论述的机制——去技能化（Braverman 1974; Steinhoff 2024; Chauhan 2026）和劳动强化（Zhang 2026;《学习与实践》2026）——联结为一个因果链条，并以2026年Token KPI这一尚未被学术文献系统分析的新现象为经验锚点，展示了马克思劳动过程理论对知识密集型行业的持续解释力。</p>
 
-<p>具体而言，本文在三个方面推进了现有理论框架。第一，Steinhoff（2024）的"吸收"框架分析的是技能如何被从劳动者身上提取并嵌入机器，但它止步于"吸收完成"的时刻，没有追问：吸收之后，劳动过程发生了什么？本文的第四环和第五环填补了这个缺口——去技能化不是终点，它为劳动强化扫清了障碍，而劳动强化反过来又加速了下一轮的去技能化。第二，Zhang（2026）的"算法剩余价值"概念强调AI作为不变资本如何压缩社会必要劳动时间，但它较少关注这种压缩在具体的劳动过程管理中以什么形式实现。本文的Token KPI分析提供了一个制度层面的补充：Token消耗排名就是"压缩社会必要劳动时间"的组织工具。第三，韩文龙等人（2025）的"四重向度"分析中，"劳动控制隐秘增强"被列为其中一个向度，但未被赋予因果优先性。本文的论证表明，控制权的转移（第三环）不是四重向度中并列的一个——它是整个变革的枢纽。没有控制权转移，效率提升的去向、技能贬值的速度、闭合循环的自我加速程度，都会不同。</p>
+<p>具体而言，本文在三个方面推进了现有理论框架。第一，Steinhoff（2024）的"吸收"框架分析的是技能如何被从劳动者身上提取并嵌入机器，但它止步于"吸收完成"的时刻，没有追问：吸收之后，劳动过程发生了什么？本文的第四环和第五环填补了这个缺口——去技能化不是终点，它为劳动强化扫清了障碍，而劳动强化反过来又加速了下一轮的去技能化。第二，Zhang（2026）的"算法剩余价值"概念强调AI作为不变资本如何压缩社会必要劳动时间，但它较少关注这种压缩在具体的劳动过程管理中以什么形式实现。本文的Token KPI分析提供了一个制度层面的补充：Token消耗排名就是"压缩社会必要劳动时间"的组织工具。第三，韩文龙等人（2025）的"四重向度"分析中，"劳动控制隐秘增强"被列为其中一个向度，但未被赋予因果优先性。本文的论证表明，控制权的转移（第三环）不是四重向度中并列的一个——它是整个变革的枢纽。</p>
 
 <h3>启发</h3>
 
@@ -412,18 +441,19 @@ graph LR
 <h3>局限</h3>
 
 <p>本文的局限是明确的。经验材料主要来自二手报道（2026年6月前后的中国科技媒体），虽然经过了多方交叉验证，但缺乏系统的一手访谈或调查数据。本文的分析聚焦于中国互联网行业的头部企业，对于中小型科技公司、外包行业、以及非技术行业中IT部门的劳动过程变化，未做充分的差异化讨论。本文的理论框架主要依托马克思劳动过程理论的传统——这一传统在揭示结构性矛盾上具有优势，但对于劳动者的主观能动性（抵制、适应、在缝隙中重建自主空间）的分析较为薄弱。这些局限同时也是未来研究可以深化的方向。</p>
+</section>
 
-<hr style="border:none;border-top:1px solid var(--border);margin:32px 0;">
-
-<div class="footnotes">
+<!-- Footnotes -->
+<div class="footnotes-block">
   <ol>
-    <li id="fn1">本文涉及的国内大厂Token KPI管理措施，来源于2026年6月中国科技媒体的交叉报道，主要来源包括：36氪"多少大厂牛马正在被强迫使用AI？"（2026年6月）、36氪"失控，AI的第一个泡沫，是程序员"（2026年6月）、凤凰网科技"AI写了90%代码，大厂程序员的煎熬时刻"（2026年4月）、南方都市报"叫停Token排名、设定支出上限……巨头开始审视AI账单"（2026年6月8日）。各方报道在关键事实上相互印证，本文以阿里巴巴为头部案例，其余公司为参照。 <a href="#fnref1">↩</a></li>
+    <li id="fn1">本文涉及的国内大厂Token KPI管理措施，来源于2026年6月中国科技媒体的交叉报道，主要来源包括：36氪"多少大厂牛马正在被强迫使用AI？"（2026年6月）、36氪"失控，AI的第一个泡沫，是程序员"（2026年6月）、凤凰网科技"AI写了90%代码，大厂程序员的煎熬时刻"（2026年4月）、南方都市报"叫停Token排名、设定支出上限……巨头开始审视AI账单"（2026年6月8日）。各方报道在关键事实上的相互印证支持了本文的经验描述。 <a href="#fnref1">↩</a></li>
   </ol>
 </div>
 
-<h2 id="refs">参考文献</h2>
-
-<div class="references">
+<!-- References -->
+<section>
+<h2>参考文献</h2>
+<div class="refs-block">
 <p>Alenezi, M. (2026). Human-AI Collaboration and the Transformation of Software Engineering Work. arXiv: 2606.03394.</p>
 <p>Braverman, H. (1974). <i>Labor and Monopoly Capital: The Degradation of Work in the Twentieth Century</i>. New York: Monthly Review Press.</p>
 <p>Chauhan, B. (2026). Automating the automators: de/up-skilling and re/off-shoring in globalized software work. <i>Socio-Economic Review</i>, 24(1), 449–475.</p>
@@ -441,19 +471,12 @@ graph LR
 <p>杨天宇 (2026). 资本主义智能化的分配悖论及其替代方案. 中国社会科学院马克思主义研究网, 2026年4月.</p>
 <p>金华、郝其宏、尹洪骁 (2025). 知识技能空心化：人工智能大模型对知识密集型行业劳动过程的重塑——基于马克思劳动过程理论的启示. 《华侨大学学报（哲学社会科学版）》, 2025年第6期, 第13-26页.</p>
 </div>
+</section>
 
-</main>
+</article>
 
 <script>
 mermaid.initialize({ startOnLoad: true, theme: 'neutral', securityLevel: 'loose' });
-// Smooth scroll for TOC links
-document.querySelectorAll('nav#toc a').forEach(a => {
-  a.addEventListener('click', e => {
-    e.preventDefault();
-    const target = document.querySelector(a.getAttribute('href'));
-    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
-});
 </script>
 
 </body>
