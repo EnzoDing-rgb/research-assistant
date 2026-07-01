@@ -4,228 +4,321 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>效率反噬：AI编程工具对中国互联网工程师劳动过程的重构</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tufte-css@1.8.0/tufte.min.css">
-<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap');
-
   :root {
-    --body-font: "Noto Serif SC", "PingFang SC", "Hiragino Sans GB", "STSong", "Songti SC", serif;
-    --heading-font: "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Heiti SC", "STHeiti", sans-serif;
-    --mono-font: "JetBrains Mono", "SF Mono", "Cascadia Code", monospace;
-    --text-color: #111;
-    --bg-color: #fffff8;
-    --link-color: #0969da;
-    --border-color: #ddd;
+    --text: #222;
+    --muted: #555;
+    --light-muted: #888;
+    --accent: #0969da;
+    --bg: #ffffff;
+    --border: #d0d7de;
+    --toc-w: 220px;
   }
+
+  *, *::before, *::after { box-sizing: border-box; }
 
   body {
-    font-family: var(--body-font);
-    background: var(--bg-color);
-    color: var(--text-color);
+    margin: 0; padding: 0;
+    font-family: "Noto Serif CJK SC", "Songti SC", "STSong", "Georgia", serif;
+    font-size: 17px; line-height: 1.72;
+    color: var(--text); background: var(--bg);
+    -webkit-font-smoothing: antialiased;
   }
 
-  article {
-    max-width: 800px;
+  .page { display: flex; }
+
+  .sidebar {
+    position: fixed; top: 0; left: 0;
+    width: var(--toc-w); height: 100vh;
+    overflow-y: auto; padding: 36px 20px 40px 28px;
+    background: #fafbfc; border-right: 1px solid var(--border); z-index: 10;
   }
 
-  /* Title area */
+  .toc-title {
+    font-size: 12px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--light-muted); margin-bottom: 18px;
+    font-family: "Noto Sans CJK SC", "PingFang SC", "STHeiti", sans-serif;
+  }
+
+  .toc ol { list-style: none; padding: 0; margin: 0; }
+
+  .toc li { margin-bottom: 2px; line-height: 1.45; }
+
+  .toc a {
+    display: block; text-decoration: none; color: var(--muted);
+    font-size: 13px; padding: 3px 8px; border-radius: 4px;
+    transition: background 0.1s, color 0.1s;
+    font-family: "Noto Sans CJK SC", "PingFang SC", "STHeiti", sans-serif;
+  }
+
+  .toc a:hover { background: #eef2f8; color: #222; }
+  .toc a.active { color: var(--accent); font-weight: 600; background: #eef5fd; }
+
+  .main {
+    margin-left: calc(var(--toc-w) + 52px); margin-right: 24px;
+    flex: 1; min-width: 0;
+  }
+
+  .paper { max-width: 820px; margin: 0 auto; padding: 52px 48px 80px; }
+
   h1 {
-    font-family: var(--heading-font);
-    font-weight: 700;
-    font-size: 1.8rem;
-    line-height: 1.35;
-    text-align: center;
-    margin-top: 2rem;
+    font-family: "Noto Sans CJK SC", "PingFang SC", "STHeiti", sans-serif;
+    font-size: 24px; font-weight: 600; line-height: 1.45;
+    margin: 0 0 6px; color: #111; text-align: center; scroll-margin-top: 32px;
   }
 
-  .author-block {
-    text-align: center;
-    margin: 1.5rem 0 2rem;
-    font-family: var(--heading-font);
-    font-size: 0.95rem;
-    line-height: 1.8;
-    color: #444;
+  h2 {
+    font-family: "Noto Sans CJK SC", "PingFang SC", "STHeiti", sans-serif;
+    font-size: 20px; font-weight: 600; margin: 50px 0 14px;
+    padding-bottom: 6px; border-bottom: 1px solid var(--border);
+    color: #111; scroll-margin-top: 32px;
   }
-  .author-block strong {
-    font-size: 1.05rem;
-    color: var(--text-color);
+
+  h3 {
+    font-family: "Noto Sans CJK SC", "PingFang SC", "STHeiti", sans-serif;
+    font-size: 17px; font-weight: 500; margin: 30px 0 10px;
+    color: #222; scroll-margin-top: 32px;
   }
+
+  p { margin: 0 0 14px; text-align: justify; text-indent: 2em; }
+  strong { color: #111; font-weight: 600; }
+
+  .author-info p, .abstract-block p, blockquote p, .footnotes-block p,
+  .refs-block p, figure.table td, .toc p, li p { text-indent: 0; }
+
+  .author-info {
+    display: table; margin: 24px auto 32px;
+    font-family: "Noto Sans CJK SC", "PingFang SC", "STHeiti", sans-serif;
+    font-size: 15px; color: #444; line-height: 2.1; text-align: center;
+  }
+  .author-info p { margin: 1px 0; }
 
   .abstract-block {
-    margin: 1.5rem 0 2.5rem;
-    padding: 1rem 1.2rem;
-    border-left: 3px solid #ccc;
-    font-size: 0.9rem;
-    line-height: 1.7;
-    color: #444;
+    margin: 20px 0 28px; padding: 14px 18px;
+    border-left: 3px solid #bbb; font-size: 15px;
+    line-height: 1.7; color: var(--muted);
   }
-  .abstract-block p { margin-bottom: 0.5rem; }
-  .keywords { font-size: 0.85rem; color: #666; }
+  .abstract-block p { margin-bottom: 6px; }
+  .keywords { font-size: 14px; color: #888; }
 
-  /* Sections */
-  section { margin-top: 2rem; }
-  section > h2 {
-    font-family: var(--heading-font);
-    font-weight: 700;
-    font-size: 1.35rem;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 0.4rem;
-    margin-bottom: 1.2rem;
-  }
-  section > h3 {
-    font-family: var(--heading-font);
-    font-weight: 600;
-    font-size: 1.1rem;
-    margin-top: 1.5rem;
-    margin-bottom: 0.6rem;
-  }
-
-  p { margin-bottom: 0.8rem; text-align: justify; }
-
-  /* Diagrams */
-  figure { margin: 1.5rem 0; }
-  figure figcaption {
-    font-family: var(--heading-font);
-    font-size: 0.85rem;
-    color: #555;
-    margin-top: 0.4rem;
-  }
-  .mermaid { display: flex; justify-content: center; }
-
-  /* Blockquote */
   blockquote {
-    margin: 1rem 0;
-    padding: 0.4rem 0 0.4rem 1.2rem;
-    border-left: 3px solid #ccc;
-    color: #555;
+    margin: 14px 0; padding: 6px 0 6px 16px;
+    border-left: 3px solid #bbb; color: var(--muted);
   }
   blockquote p { font-style: italic; }
 
-  /* Tables */
+  ul, ol { margin: 10px 0 16px; padding-left: 2.2em; }
+  li { margin-bottom: 4px; }
+
   table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 1.2rem 0;
-    font-size: 0.9rem;
+    width: 100%; border-collapse: collapse;
+    margin: 16px 0; font-size: 14px;
+    font-family: "Noto Sans CJK SC", "PingFang SC", "STHeiti", sans-serif;
   }
-  thead { border-top: 2px solid #333; border-bottom: 1px solid #333; }
-  tbody { border-bottom: 2px solid #333; }
-  th, td { padding: 0.45rem 0.6rem; text-align: left; }
-  th { font-family: var(--heading-font); font-weight: 600; }
-  tr:not(:last-child) { border-bottom: 1px solid #eee; }
+  th { border-top: 2px solid #333; border-bottom: 1.5px solid #333; padding: 8px 10px; text-align: left; font-weight: 600; }
+  td { border-bottom: 0.5px solid #999; padding: 8px 10px; }
+  thead { border-bottom: 1px solid #000; }
+  figure.table { margin: 16px 0; }
+  figure.table figcaption { font-size: 13px; color: var(--muted); margin-top: 6px; text-align: center; }
 
-  /* Code / pre (tech stack diagram) */
   pre {
-    background: #f8f8f8;
-    padding: 0.8rem 1rem;
-    font-family: var(--mono-font);
-    font-size: 0.8rem;
-    line-height: 1.45;
-    overflow-x: auto;
-    border-radius: 3px;
+    background: #f6f8fa; padding: 14px 16px;
+    font-family: "JetBrains Mono", "SF Mono", "Cascadia Code", monospace;
+    font-size: 13px; line-height: 1.5; overflow-x: auto; border-radius: 4px;
   }
 
-  /* Lists */
-  ul, ol { margin: 0.6rem 0 1rem; padding-left: 1.5rem; }
-  li { margin-bottom: 0.35rem; }
+  .framework-diagram { margin: 20px 0; text-align: center; }
+  .framework-diagram svg { max-width: 100%; }
 
-  /* Footnotes – tufte-css uses sidenotes, but for footnotes we use simple sup */
-  .fn { font-size: 0.8rem; color: var(--link-color); text-decoration: none; }
-  .fn:hover { text-decoration: underline; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 28px 0; }
 
   .footnotes-block {
-    margin-top: 3rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--border-color);
-    font-size: 0.8rem;
-    color: #555;
-    line-height: 1.6;
+    margin-top: 36px; padding-top: 14px;
+    border-top: 1px solid var(--border);
+    font-size: 13px; color: var(--muted); line-height: 1.6;
   }
-  .footnotes-block ol { padding-left: 1.2rem; }
-  .footnotes-block li { margin-bottom: 0.4rem; }
+  .footnotes-block ol { padding-left: 1.6em; }
 
-  /* Refs */
-  .refs-block {
-    margin-top: 1.5rem;
-    font-size: 0.82rem;
-    line-height: 1.65;
-  }
-  .refs-block p {
-    margin-bottom: 0.35rem;
-    padding-left: 1.2rem;
-    text-indent: -1.2rem;
-  }
+  .refs-block { margin-top: 20px; font-size: 14px; line-height: 1.65; }
+  .refs-block p { margin-bottom: 5px; padding-left: 1.4em; text-indent: -1.4em; }
 
-  /* Margin notes (tufte feature) */
-  .sidenote, .marginnote {
-    font-family: var(--heading-font);
-    font-size: 0.78rem;
-    color: #555;
+  .fn { font-size: 0.82em; color: var(--accent); text-decoration: none; vertical-align: super; }
+  .fn:hover { text-decoration: underline; }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .sidebar { display: none; }
+    .main { margin-left: 0; }
+    .paper { padding: 28px 20px 48px; }
+    h1 { font-size: 22px; } h2 { font-size: 18px; }
+    body { font-size: 16px; }
   }
 
   /* Print */
   @media print {
-    body { font-size: 11pt; }
-    article { max-width: 100%; }
-    @page { margin: 2.5cm 2cm; size: A4; }
-  }
+    @page {
+      size: A4;
+      margin: 2.5cm 2.2cm 2.5cm 2.5cm;
+      @bottom-center {
+        content: counter(page);
+        font-family: "Noto Sans CJK SC", "PingFang SC", sans-serif;
+        font-size: 9pt; color: #888;
+      }
+    }
 
-  /* Mobile */
-  @media (max-width: 760px) {
-    article { padding: 0 1rem; }
-    h1 { font-size: 1.4rem; }
-    section > h2 { font-size: 1.15rem; }
+    .sidebar { display: none; }
+    .main { margin-left: 0; }
+
+    body {
+      font-family: "Noto Serif CJK SC", "Songti SC", "STSong", "Georgia", serif;
+      font-size: 11pt; line-height: 1.8; color: #000; background: #fff;
+    }
+
+    .paper { max-width: 100%; padding: 0; }
+
+    h1 {
+      font-family: "Noto Sans CJK SC", "PingFang SC", sans-serif;
+      font-size: 18pt; font-weight: 700; text-align: center;
+      margin: 36pt 0 24pt; page-break-after: avoid;
+    }
+
+    h2 {
+      font-family: "Noto Sans CJK SC", "PingFang SC", sans-serif;
+      font-size: 13pt; font-weight: 600; margin: 28pt 0 10pt; page-break-after: avoid;
+    }
+
+    h3 {
+      font-family: "Noto Sans CJK SC", "PingFang SC", sans-serif;
+      font-size: 11.5pt; font-weight: 600; margin: 18pt 0 8pt; page-break-after: avoid;
+    }
+
+    p {
+      margin: 0 0 8pt; text-align: justify; text-indent: 22pt;
+      orphans: 2; widows: 2;
+    }
+    .author-info p, .abstract-block p, blockquote p, .footnotes-block p,
+    .refs-block p, figure.table td, li p { text-indent: 0; }
+
+    .refs-block p { font-size: 9pt; line-height: 1.55; margin-bottom: 4pt; }
+
+    body { word-spacing: 0; }
+
+    .author-info {
+      display: table; margin: 20pt auto 28pt;
+      font-family: "Noto Sans CJK SC", "PingFang SC", sans-serif;
+      font-size: 11pt; color: #333; line-height: 2;
+    }
+    .author-info p { margin: 1pt 0; text-align: left; }
+
+    .abstract-block {
+      margin: 14pt 0 20pt; padding: 10pt 14pt;
+      border-left: 3px solid #999; font-size: 10pt;
+    }
+
+    blockquote {
+      margin: 12pt 0; padding: 8pt 16pt;
+      border-left: 3px solid #555; font-size: 10.5pt; page-break-inside: avoid;
+    }
+
+    table { font-size: 9.5pt; font-family: "Noto Sans CJK SC", "PingFang SC", sans-serif; }
+    th { border-top: 2px solid #000; border-bottom: 1.5px solid #000; }
+    td { border-bottom: 0.5px solid #999; }
+    figure.table { page-break-inside: avoid; }
+
+    a { color: #000; text-decoration: none; }
+    hr { border-color: #999; margin: 24pt 0; }
+    pre { font-size: 9pt; page-break-inside: avoid; }
+    .framework-diagram { margin: 16pt 0; page-break-inside: avoid; }
+    .framework-diagram svg { max-width: 100%; }
+    .page-break { page-break-before: always; }
+
+    strong { color: #000; font-weight: 700; }
+    .main { margin-left: 0; margin-right: 0; }
   }
 </style>
 </head>
 <body>
+<div class="page">
 
-<article>
+<aside class="sidebar">
+  <nav class="toc"><div class="toc-title">目录</div>
+    <ol>
+      <li><a href="#s2">摘要</a></li>
+      <li><a href="#s3">引言</a></li>
+      <li><a href="#s7">一、前人知识的凝结</a></li>
+      <li><a href="#s8">二、技能相对贬值</a></li>
+      <li><a href="#s11">三、控制权转移：Token KPI作为劳动纪律装置</a></li>
+      <li><a href="#s15">四、越高效越累：效率提升的果实归谁</a></li>
+      <li><a href="#s19">五、闭合循环：工程师在加速自己的技能贬值</a></li>
+      <li><a href="#s23">结论：反思与启发</a></li>
+      <li><a href="#s24">参考文献</a></li>
+    </ol>
+  </nav>
+</aside>
 
-<h1>效率反噬：AI编程工具对中国互联网工程师劳动过程的重构</h1>
+<main class="main">
+<article class="paper">
 
-<div class="author-block">
-  <strong>丁冯德</strong><br>
-  国家安全学（计算机技术方向）博士研究生<br>
-  学号：20251402002
+<h1 id="s1">效率反噬：AI编程工具对中国互联网工程师劳动过程的重构</h1>
+
+<div class="author-info">
+  <p>丁冯德</p>
+  <p>国家安全学（计算机技术方向）博士研究生</p>
+  <p>学号：20251402002</p>
 </div>
+
+<h2 id="s2">摘要</h2>
 
 <div class="abstract-block">
-  <p><strong>摘要：</strong>2026年，中国互联网大厂正在经历一场由AI编程工具引发的劳动过程深刻重构。阿里巴巴将核心考核指标从日活用户数更换为Token消耗量，腾讯内部公布Token消耗排名，小米大模型负责人公开表示"每天AI对话少于100次的人可以辞职"——这些分散的公司决策背后，隐藏着一个共同的逻辑：当AI工具大幅提升了工程师的个体产出效率，效率提升的果实没有转化为闲暇或更高的工资，而是被管理层立即吸收为更高的产出要求。本文以2026年中国互联网大厂的Token KPI考核体系为核心经验材料，运用马克思劳动过程理论的分析框架，论证一个五环因果链：AI编程工具作为前人编程知识的集体凝结（第一环），降低了"写出能用的代码"所需的学习投入，导致个体工程师的技能相对贬值（第二环）；技能贬值削弱了劳动者的议价能力，劳动过程的控制权向资本方倾斜（第三环）；控制权在手，AI的效率提升立即被转化为更高的产出要求，劳动者陷入"越高效越累"的悖论（第四环）；而工程师在考核压力下开发的内部AI工具，进一步覆盖自己和他人的技能，形成一个自我加速的闭合循环（第五环）。</p>
-  <p class="keywords"><strong>关键词：</strong>AI编程工具；劳动过程；去技能化；Token KPI；相对剩余价值</p>
+<p>2026年，中国互联网大厂正在经历一场由AI编程工具引发的劳动过程深刻重构。阿里巴巴将核心考核指标从日活用户数更换为Token消耗量，腾讯内部公布Token消耗排名，小米大模型负责人公开表示"每天AI对话少于100次的人可以辞职"——这些分散的公司决策背后，隐藏着一个共同的逻辑：当AI工具大幅提升了工程师的个体产出效率，效率提升的果实没有转化为闲暇或更高的工资，而是被管理层立即吸收为更高的产出要求。本文以2026年中国互联网大厂的Token KPI考核体系为核心经验材料，运用马克思劳动过程理论的分析框架，论证一个五环因果链：AI编程工具作为前人编程知识的集体凝结（第一环），降低了"写出能用的代码"所需的学习投入，导致个体工程师的技能相对贬值（第二环）；技能贬值削弱了劳动者的议价能力，劳动过程的控制权向资本方倾斜（第三环）；控制权在手，AI的效率提升立即被转化为更高的产出要求，劳动者陷入"越高效越累"的悖论（第四环）；而工程师在考核压力下开发的内部AI工具，进一步覆盖自己和他人的技能，形成一个自我加速的闭合循环（第五环）。</p>
+<p class="keywords"><strong>关键词：</strong>AI编程工具；劳动过程；去技能化；Token KPI；相对剩余价值</p>
 </div>
 
-<hr style="border:none;border-top:1px solid #eee;margin:1.5rem 0;">
+<hr>
 
-<!-- Paper structure -->
-<section>
-<h2>论文结构</h2>
-<figure>
-  <pre class="mermaid">
-graph LR
-    A["第一章<br/>前人知识的凝结<br/>AI工具从哪来"]
-    B["第二章<br/>技能相对贬值<br/>会写代码不再稀缺"]
-    C["第三章<br/>控制权转移<br/>Token KPI"]
-    D["第四章<br/>越高效越累<br/>效率归谁"]
-    E["第五章<br/>闭合循环<br/>自己加速自己"]
-    F["结论<br/>反思与启发"]
-    A --> B --> C --> D --> E --> F
-    style A fill:#f5f5f5,stroke:#333
-    style B fill:#fce8e6,stroke:#d93025
-    style C fill:#fff3e0,stroke:#e8710a
-    style D fill:#fce8e6,stroke:#d93025
-    style E fill:#fce8e6,stroke:#d93025
-    style F fill:#e8f0fe,stroke:#1967d2
-  </pre>
-</figure>
-</section>
+<!-- 论文结构图 -->
+<div class="framework-diagram">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 100" width="720" height="100" style="font-family:'Noto Sans CJK SC','PingFang SC',sans-serif;font-size:12px;">
+  <defs>
+    <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#888"/>
+    </marker>
+  </defs>
+  <rect x="0" y="20" width="95" height="60" rx="4" fill="#f5f5f5" stroke="#999" stroke-width="1"/>
+  <text x="47" y="45" text-anchor="middle" font-size="10" fill="#555">知识凝结</text>
+  <text x="47" y="62" text-anchor="middle" font-size="9" fill="#888">AI工具从哪来</text>
 
-<hr style="border:none;border-top:1px solid #eee;margin:1.5rem 0;">
+  <rect x="120" y="20" width="95" height="60" rx="4" fill="#fce8e6" stroke="#d93025" stroke-width="1"/>
+  <text x="167" y="45" text-anchor="middle" font-size="10" fill="#555">技能贬值</text>
+  <text x="167" y="62" text-anchor="middle" font-size="9" fill="#888">会写代码不再稀缺</text>
 
-<!-- Introduction -->
-<section>
-<h2>引言</h2>
+  <rect x="240" y="20" width="95" height="60" rx="4" fill="#fff3e0" stroke="#e8710a" stroke-width="1"/>
+  <text x="287" y="45" text-anchor="middle" font-size="10" fill="#555">控制权转移</text>
+  <text x="287" y="62" text-anchor="middle" font-size="9" fill="#888">Token KPI</text>
+
+  <rect x="360" y="20" width="95" height="60" rx="4" fill="#fce8e6" stroke="#d93025" stroke-width="1"/>
+  <text x="407" y="45" text-anchor="middle" font-size="10" fill="#555">越高效越累</text>
+  <text x="407" y="62" text-anchor="middle" font-size="9" fill="#888">效率归谁</text>
+
+  <rect x="480" y="20" width="95" height="60" rx="4" fill="#fce8e6" stroke="#d93025" stroke-width="1"/>
+  <text x="527" y="45" text-anchor="middle" font-size="10" fill="#555">闭合循环</text>
+  <text x="527" y="62" text-anchor="middle" font-size="9" fill="#888">自己加速自己</text>
+
+  <rect x="600" y="20" width="95" height="60" rx="4" fill="#e8f0fe" stroke="#1967d2" stroke-width="1"/>
+  <text x="647" y="45" text-anchor="middle" font-size="10" fill="#555">结论</text>
+  <text x="647" y="62" text-anchor="middle" font-size="9" fill="#888">反思与启发</text>
+
+  <line x1="95" y1="50" x2="118" y2="50" stroke="#888" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <line x1="215" y1="50" x2="238" y2="50" stroke="#888" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <line x1="335" y1="50" x2="358" y2="50" stroke="#888" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <line x1="455" y1="50" x2="478" y2="50" stroke="#888" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <line x1="575" y1="50" x2="598" y2="50" stroke="#888" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+</svg>
+</div>
+
+<hr>
+
+<h2 id="s3">引言</h2>
 
 <p>2026年3月16日，阿里巴巴集团CEO吴泳铭亲自挂帅，成立了ATH（Alibaba Token Hub）事业群。<a class="fn" href="#fn1" id="fnref1">[1]</a> 这不仅是阿里历史上规模最大的一次AI业务整合——通义实验室、MaaS业务线、千问事业部等五大事业群全部并入，更引人注目的是它的考核逻辑：核心指标从日活用户数（DAU）直接更换为Token消耗量。模型效果的评估、用户体验的衡量，全部折算为Token调用量。员工的Token消耗被做成排行榜，排名直接与绩效评级、转正、晋升挂钩。</p>
 
@@ -242,11 +335,10 @@ graph LR
 <p>关于AI对劳动过程的影响，已有研究为我们提供了重要的出发点。马克思在《资本论》中对机器和大工业的分析（1867）以及Braverman对"去技能化"的系统论证（1974）构成了经典基础。在当代文献中，Steinhoff（2024）提出了机器学习"涌现式吸收"技能的新机制，Zhang（2026）和《学习与实践》（2026）分析了AI如何同时强化相对剩余价值和绝对剩余价值的生产，Chauhan（2026）提供了软件工程中去技能化的跨国经验证据，韩文龙等人（2025）从生产力三要素的视角分析了AI对劳动过程的四重变革向度，金华等人（2025）提出了知识密集型行业中"知识技能空心化"的本土概念。这些研究分别在去技能化、剩余价值生产、算法管理和劳动过程变革等维度做出了贡献，但它们通常将"技能贬值"和"劳动强化"作为两个独立机制来处理，尚未系统论证两者之间的因果关系。本文试图填补这个缺口：不是分别讨论技能贬值和劳动强化，而是论证前者如何导致了后者，并形成一个自我加速的闭合循环。</p>
 
 <p>本文讨论的是AI编程工具对工程师劳动<b>过程</b>的影响——即"怎么干活、谁决定怎么干活、效率提升的果实归谁"的问题。本文不直接回答"AI会不会导致程序员大面积失业"的就业总量问题，也不涉及AI芯片、底层编译器或训练框架等基础设施层面的技术分析。本文的经验材料主要来自中国互联网行业，以阿里巴巴为深度案例。选择阿里巴巴，是因为它在本轮Token KPI浪潮中动作最大、组织调整最激进——成立了专门的ATH事业群、由集团CEO亲自挂帅、将核心考核指标从DAU直接替换为Token消耗量。这些特征使其成为观察AI时代劳动过程控制权转移的"极端案例"，适合用于揭示机制，而非代表行业的普遍状况。部分国际案例用作比较参照。</p>
-</section>
 
-<!-- Chapter 1 -->
-<section>
-<h2>第一章 前人知识的凝结：AI编程工具从何而来</h2>
+<hr>
+
+<h2 id="s7">一、前人知识的凝结：AI编程工具从何而来</h2>
 
 <p>在分析AI编程工具对工程师的影响之前，必须首先澄清一个经常被忽略的前提：这些工具不是凭空出现的。今天能够自动生成代码的大语言模型——它们的训练数据来自全球程序员在过去几十年中公开发布的海量代码、技术文档、问答讨论和学术论文。Stack Overflow上数以百万计的问答、GitHub上数以亿计的代码提交、各大学术会议上发表的算法论文——这些是人类程序员集体智力劳动的产物。AI编程工具的"能力"，本质上是这些前人劳动成果被模型"吸收"后的重新释放。</p>
 
@@ -261,11 +353,8 @@ graph LR
 <p>这一机制的覆盖范围不限于简单的业务逻辑。在2026年的技术实践中，AI代码生成已经从最初的应用层（写一个网页、拼接一个API）向上扩展到了基础设施层。曾经需要具备多年系统编程经验的底层开发和系统优化等工作，AI工具正在逐步覆盖。不同层级的编程活动——从业务代码到底层优化——对应着工程师在不同学习阶段积累的不同类型的知识，而现在AI在每一层都能生成至少"看起来可用"的结果。</p>
 
 <p>这不是说AI写的代码质量已经超过了人类专家。而是说：AI工具的存在，从根本上改变了"会写这段代码"这件事的稀缺性。</p>
-</section>
 
-<!-- Chapter 2 -->
-<section>
-<h2>第二章 技能相对贬值：当"会写代码"不再是稀缺筹码</h2>
+<h2 id="s8">二、技能相对贬值：当"会写代码"不再是稀缺筹码</h2>
 
 <p>上一章论证了AI编程工具是如何产生的——它们是前人编程知识的集体凝结。这一章要讨论这个事实的直接后果：当过去积累的编程知识被模型大规模吸收后，当下每个程序员所拥有的个人技能，在劳动力市场上的相对价值会发生什么变化。</p>
 
@@ -281,17 +370,17 @@ graph LR
 
 <p>这里需要避免一个常见的误解：技能贬值不是只在"简单编程"的层面发生。如果我们把编程这个职业所涉及的技术能力，从底层到应用层做一个简化的层次划分，大致是这样的：</p>
 
-<figure>
-  <pre><code>┌──────────────────────────────────┐
+<figure class="table">
+<pre>┌─────────────────────────────────┐
 │  应用层  │  Web前端、移动端、业务逻辑  │  AI代码生成率 70-90%
-├──────────────────────────────────┤
+├─────────────────────────────────┤
 │  服务层  │  后端架构、API设计、数据库  │  AI辅助生成 + 审查
-├──────────────────────────────────┤
+├─────────────────────────────────┤
 │  系统层  │  性能优化、并发、分布式    │  AI建议 + 人做决策
-├──────────────────────────────────┤
+├─────────────────────────────────┤
 │  底层   │  底层开发、编译优化、驱动   │  开始被AI渗透
-└──────────────────────────────────┘</code></pre>
-  <figcaption>图1：编程技术栈各层次与AI渗透程度</figcaption>
+└─────────────────────────────────┘</pre>
+<figcaption>图1：编程技术栈各层次与AI渗透程度</figcaption>
 </figure>
 
 <p>越往上的层次，AI的覆盖率越高——应用层代码的70-90%已经可以由AI生成（谷歌2026年宣布75%新增代码由AI生成，中国大厂的数据与这一水平接近）。越往下的层次，人类的判断和审查仍然不可或缺，但AI生成的"初稿"正在降低这些层次的工作门槛。关键不在于AI在哪一层"比人强"，而在于：在<b>每一层</b>，"能做这件事"的稀缺性都在下降。不同的只是下降的速度和幅度。</p>
@@ -307,13 +396,10 @@ graph LR
 <p>对于上述分析，一个值得认真对待的反论是：AI工具在替代常规编码能力的同时，也在创造新的高技能需求——比如系统架构设计、AI治理、跨领域的"问题定义"能力。如果这些新技能的市场溢价超过了旧技能的贬值幅度，那么本文的"技能贬值"判断就可能只是描述了硬币的一面，而忽略了另一面。</p>
 
 <p>这个反论在经验上有一定依据。2026年上半年，中国大厂的AI算法岗薪资确实在持续攀升，AI方向硕士起薪是传统技术岗的1.4倍以上。但这里的关键在于：技能溢价集中在少数顶层岗位（算法研究员、AI系统架构师），而技能贬值分布在多数中间层岗位（前端开发、常规后端、基础测试）。这不是"一半贬值一半升值"的对称格局——升值发生在金字塔尖，贬值发生在金字塔身和底座。用马克思的框架来看，这不构成对去技能化的反驳，而是进一步印证了劳动力市场的"极化"趋势：少数人获得技能溢价，多数人经历技能贬值。这种极化本身就是资本主义技术应用的非对称后果。</p>
-</section>
 
-<!-- Chapter 3 -->
-<section>
-<h2>第三章 控制权转移：Token KPI作为劳动纪律装置</h2>
+<h2 id="s11">三、控制权转移：Token KPI作为劳动纪律装置</h2>
 
-<p>前两章论证了一个递进关系：AI编程工具是前人集体劳动成果的凝结（第一章）→ 这种凝结降低了个体技能的市场稀缺性（第二章）。这个因果关系为本章的分析铺设了基础：当个人技能不再构成不可替代的筹码时，劳动过程中"怎么干活"的决定权，就开始从劳动者向雇主倾斜。</p>
+<p>前两章论证了一个递进关系：AI编程工具是前人集体劳动成果的凝结 → 这种凝结降低了个体技能的市场稀缺性。这个因果关系为本章的分析铺设了基础：当个人技能不再构成不可替代的筹码时，劳动过程中"怎么干活"的决定权，就开始从劳动者向雇主倾斜。</p>
 
 <h3>3.1 阿里的Token考核：一个标志性事件</h3>
 
@@ -323,19 +409,13 @@ graph LR
 
 <p>用马克思的术语说，这是在劳动过程中实现从"形式从属"到"实质从属"的推进。"形式从属"指的是：资本家买下你的劳动时间，但你还保有自己的劳动技能和节奏——<b>你怎么干活是你的事，只要交出结果</b>。"实质从属"则是：资本家不仅购买你的时间，还控制你劳动过程的每一个环节——<b>你怎么干活由资本来规定</b>。Token KPI背后的逻辑正是实质从属的当代形态：不是工头盯着你，是算法记录你的每一笔AI调用，生成排名，交给全部门看。</p>
 
-<p>这里需要回应一个重要的替代解释。有人可能会说：Token KPI不一定是资本方主动夺取控制权的结果——它可能只是管理层面对AI这个新工具时的<b>管理混乱</b>。以前没有Token这个指标，没人知道怎么衡量员工"用没用AI""用了多少AI"，Token恰好是最容易统计的数字，于是就被拿来当KPI了。换句话说，这不是"劳动过程从属"的推进，而是管理者在技术变革面前的"测量能力不足"。</p>
+<p>这里需要回应一个重要的替代解释。有人可能会说：Token KPI不一定是资本方主动夺取控制权的结果——它可能只是管理层面对AI这个新工具时的<b>管理混乱</b>。以前没有Token这个指标，没人知道怎么衡量员工"用没用AI""用了多少AI"，Token恰好是最容易统计的数字，于是就被拿来当KPI了。</p>
 
-<p>这个替代解释在个别公司的实践中确实能找到佐证——腾讯的Token排名上线后仅两个月就被叫停，说明管理层自己也没想清楚。但动机判断（管理层是"故意的"还是"无意的"）不应替代效果判断。无论最初的动机是什么，Token KPI在<b>客观效果</b>上产生了三个后果：它将技术采纳从个人选择变成了组织强制，它将"用了多少AI"从不可见的行为变成了可排名的数据，它让"怎么干活"的决定权从劳动者手中转移到了管理层设定的指标体系之中。阿里ATH事业群的设立——由集团CEO亲自挂帅、将DAU替换为Token消耗量——很难被仅仅解释为"不知道该怎么衡量"。这更接近一个有意识的、系统性的劳动控制基础设施的搭建。</p>
+<p>这个替代解释在个别公司的实践中确实能找到佐证——腾讯的Token排名上线后仅两个月就被叫停，说明管理层自己也没想清楚。但动机判断不应替代效果判断。无论最初的动机是什么，Token KPI在<b>客观效果</b>上产生了三个后果：它将技术采纳从个人选择变成了组织强制，它将"用了多少AI"从不可见的行为变成了可排名的数据，它让"怎么干活"的决定权从劳动者手中转移到了管理层设定的指标体系之中。阿里ATH事业群的设立——由集团CEO亲自挂帅、将DAU替换为Token消耗量——很难被仅仅解释为"不知道该怎么衡量"。这更接近一个有意识的、系统性的劳动控制基础设施的搭建。</p>
 
 <h3>3.2 行业扩散</h3>
 
-<p>2026年上半年，类似的逻辑在全行业扩散。这些管理措施的细节各不相同，但共享一个原则：用AI工具的用量来量化工程师的劳动投入，用量化结果来排序和考核：</p>
-
-<ul>
-<li>腾讯内部公布Token消耗排名，向员工发出"每月最好消耗1000元Token"的信号。6月初，在争议声中取消了排名制度。</li>
-<li>昆仑万维强制全员AI编程，开发效率须提高50%以上，未达标者进入末位淘汰范围。</li>
-<li>网易以AI工具平台的积分消耗评估员工的AI使用频率，积分低的被上级约谈。</li>
-</ul>
+<p>2026年上半年，类似的逻辑在全行业扩散。这些管理措施的细节各不相同，但共享一个原则：用AI工具的用量来量化工程师的劳动投入，用量化结果来排序和考核：腾讯内部公布Token消耗排名，向员工发出"每月最好消耗1000元Token"的信号，6月初在争议声中取消了排名制度；昆仑万维强制全员AI编程，开发效率须提高50%以上，未达标者进入末位淘汰范围；网易以AI工具平台的积分消耗评估员工的AI使用频率，积分低的被上级约谈。</p>
 
 <p>这些管理工具共享一个深层结构：它们将"技术采纳"从个体的自主选择，转变为组织层面的强制要求。它们将"用了多少AI"从不可见的个人习惯，转化为可视化、可比较、可排名的数据。在表面上，它们是在推广新技术；在实质上，它们是在用新技术来建立对劳动投入的新的监控机制。</p>
 
@@ -346,11 +426,8 @@ graph LR
 <p>现有的算法管理研究主要聚焦于两类劳动者：物流仓储工人（以Amazon仓库为典型）和平台零工（以Uber司机和外卖骑手为典型）。Token KPI的不同之处在于，它把同一套逻辑应用到了一种传统上被认为拥有较高自主权的劳动群体——软件工程师身上。工程师曾经被（也被自己）视为"手艺人"——工作质量不能简化为数量指标，创造性工作不能计件。Token KPI打破了这种自我认知。它用一条指标——你烧了多少Token——来代表你的"先进性"和"投入度"。</p>
 
 <p>这引出了一个被忽视的问题：当考核指标从"产出了什么"变成"用了什么工具"，管理的目的和管理的手段发生了倒置。Token消耗本身只是成本，并不是价值。多个公司的实践都出现了形式主义的问题：员工为了达标，安排AI Agent执行无意义的大批量任务、让AI续写没有实际用途的长文本、故意拉长对话上下文以增加Token计数。全球企业级AI应用中，近半数Token消耗被评估为无效浪费。但问题不在于"有人钻空子"——所有的考核指标都会被博弈，关键在于：当一个指标可以被系统性操纵而管理层仍然坚持使用它，说明这个指标真正的功能可能不在于衡量产出，而在于维持一种<b>你必须用AI</b>的强制性信号。</p>
-</section>
 
-<!-- Chapter 4 -->
-<section>
-<h2>第四章 越高效越累：效率提升的果实归谁</h2>
+<h2 id="s15">四、越高效越累：效率提升的果实归谁</h2>
 
 <p>前三章论证了：AI工具吸收并重新释放了前人的编程知识 → 个体技能相对贬值 → 劳动过程控制权转移。本章要回答的是这个链条中最多人不理解的一环：既然AI让一个人能干三个人的活了，为什么人反而更累了？效率提升去哪了？</p>
 
@@ -372,7 +449,7 @@ graph LR
 
 <h3>4.3 理论定位：双重强化</h3>
 
-<p>发表于《学习与实践》2026年第5期的一篇论文（题为"人工智能时代的劳动价值论重释"，属教育部哲学社会科学重大课题"人工智能背景下马克思劳动价值论时代化研究"的阶段性成果）提出了一个有助于系统化理解上述现象的分析框架："双重强化"。AI同时强化了两种剩余价值生产方式——</p>
+<p>发表于《学习与实践》2026年第5期的一篇论文提出了一个有助于系统化理解上述现象的分析框架："双重强化"。AI同时强化了两种剩余价值生产方式——</p>
 
 <p>第一种是<b>相对剩余价值</b>：通过压缩单位产出的必要劳动时间，扩大剩余劳动时间在总劳动时间中的占比。AI让你一小时能干三小时的活，但你的工资只需覆盖这一小时中"养活你自己"的那一小部分（必要劳动时间）；剩下的时间所产生的全部产出，都是剩余劳动时间的内容。</p>
 
@@ -381,11 +458,8 @@ graph LR
 <p>Rohde（2026）在arXiv预印本中引入的"能力伪装"概念，为这个分析增加了一个关键的补充。他指出，AI生成的高质量产出制造了"组织能力已被成功替代"的假象——代码可以被自动生成、测试可以自动运行、部署可以无人化。但这层表面能力下面，仍然需要少数深层次理解系统的人进行持续的代码审查、架构决策、安全判断和隐性维护。当管理层基于"代码生成率90%了还养那么多人干什么"的判断压缩团队规模时，这些隐性工作并不会消失——它们被以更高的强度分摊到剩下的工程师身上。</p>
 
 <p>这就是效率反噬的完整逻辑。AI让每个人产出更多，但更多产出并没有变成更多工资或更多自由；它变成了管理层的更多期待、更高产出基线、更少的团队人数、以及剩下的每个人更重的隐性劳动负担。</p>
-</section>
 
-<!-- Chapter 5 -->
-<section>
-<h2>第五章 闭合循环：工程师在加速自己的技能贬值</h2>
+<h2 id="s19">五、闭合循环：工程师在加速自己的技能贬值</h2>
 
 <p>前面四章论证了一条从"前人知识凝结"到"越高效越累"的线性因果链。但是，如果这个链条只走一遍就停下来，它的影响是有限的。本章要论证的是：这个链条不是线性的，它形成一个闭合循环。而促使循环持续转动的，恰恰是工程师自己——在现有的考核逻辑下，每个理性个体的最优选择，都在为下一轮循环添加燃料。</p>
 
@@ -393,13 +467,7 @@ graph LR
 
 <p>阿里的一位内部Coding Agent开发工程师，在面对媒体采访时说出了这个群体最深的困境："我在做一个加速淘汰自己的工具。"这不是修辞。做一个内部AI编程工具——即使不是为了替代任何人，只是为了让团队的开发效率更高——这个行为的直接后果是：团队里更多同事的更多编码工作被AI覆盖，他们的编码技能因此少了一次又一次的实战机会，技能的折旧速度加快。而当下一轮考核来临时，AI代码生成率的水涨船高会让"人写了多少代码"变得更加无足轻重。</p>
 
-<p>这不是阴谋论。没有任何一个参与这个过程的人——工程师、团队主管、HR、CEO——需要有一个"逐步消灭编程岗位"的计划。每个人只是在做当前激励结构下最合理的事：</p>
-
-<ul>
-<li>工程师：用AI提高产出，达成Token KPI，保住绩效</li>
-<li>团队主管：用AI压缩交付周期，完成部门目标，向上汇报</li>
-<li>CEO：用AI降低人力依赖，提高股东回报</li>
-</ul>
+<p>这不是阴谋论。没有任何一个参与这个过程的人——工程师、团队主管、HR、CEO——需要有一个"逐步消灭编程岗位"的计划。每个人只是在做当前激励结构下最合理的事：工程师用AI提高产出，达成Token KPI，保住绩效；团队主管用AI压缩交付周期，完成部门目标，向上汇报；CEO用AI降低人力依赖，提高股东回报。</p>
 
 <p>这些分散的个体理性选择，在系统层面构成了一个没有人主观想要但所有人共同造成的结果：编程这项技能的集体贬值在加速，而每个人用来应对这种贬值的策略——更多地使用AI——恰好就是加速贬值的原因。</p>
 
@@ -414,11 +482,8 @@ graph LR
 <p>这个闭合循环将如何进入下一圈——已经可以预见。随着中国市场对"会写代码"这项技能的评价基准持续下调，工程师的劳动力市场议价能力将进一步削弱。企业将有更强的动力压缩正式编制、使用外包和AI工具的组合来替代全职工程师。而随着AI工具能力的持续提升（每一代新模型的代码生成能力都比上一代更强，因为每一代新模型都吸收了这一代工程师的更多劳动成果），下一圈循环将从更高的起点开始：更多前人知识凝结在模型中，更低的培训成本，更弱的议价能力，更高的Token KPI基线。</p>
 
 <p>Xu和Jia（2026）所描述的"结构性技能形成阻断"——大厂不招新人、不续签、不提供成长通道——在这一循环中的角色是双重的。它一方面是循环的结果（管理层不再需要培养新人，因为AI弥合了经验差距），另一方面也是循环的加速器（当新一代工程师无法通过实际项目积累经验，他们的技能基础更加薄弱，对AI工具的依赖也就更深）。</p>
-</section>
 
-<!-- Conclusion -->
-<section>
-<h2>结论：反思与启发</h2>
+<h2 id="s23">结论：反思与启发</h2>
 
 <p>本文以2026年中国互联网大厂的Token KPI考核体系为核心经验材料，运用马克思劳动过程理论的框架，论证了一个五环因果循环：AI编程工具是前人编程知识的集体凝结（第一环），它降低了个体工程师技能的市场稀缺性（第二环），削弱了劳动者对劳动过程的议价能力，使控制权向资本方转移，Token KPI成为实质从属的当代技术实现形式（第三环），控制权在手，效率提升立即被吸收为更高的产出要求，效率悖论由此产生（第四环），而工程师在考核压力下"先用了再说"的个体理性行为，加速了整个职业群体的技能贬值，形成闭合循环（第五环）。</p>
 
@@ -441,18 +506,13 @@ graph LR
 <h3>局限</h3>
 
 <p>本文的局限是明确的。经验材料主要来自二手报道（2026年6月前后的中国科技媒体），虽然经过了多方交叉验证，但缺乏系统的一手访谈或调查数据。本文的分析聚焦于中国互联网行业的头部企业，对于中小型科技公司、外包行业、以及非技术行业中IT部门的劳动过程变化，未做充分的差异化讨论。本文的理论框架主要依托马克思劳动过程理论的传统——这一传统在揭示结构性矛盾上具有优势，但对于劳动者的主观能动性（抵制、适应、在缝隙中重建自主空间）的分析较为薄弱。这些局限同时也是未来研究可以深化的方向。</p>
-</section>
 
-<!-- Footnotes -->
 <div class="footnotes-block">
-  <ol>
-    <li id="fn1">本文涉及的国内大厂Token KPI管理措施，来源于2026年6月中国科技媒体的交叉报道，主要来源包括：36氪"多少大厂牛马正在被强迫使用AI？"（2026年6月）、36氪"失控，AI的第一个泡沫，是程序员"（2026年6月）、凤凰网科技"AI写了90%代码，大厂程序员的煎熬时刻"（2026年4月）、南方都市报"叫停Token排名、设定支出上限……巨头开始审视AI账单"（2026年6月8日）。各方报道在关键事实上的相互印证支持了本文的经验描述。 <a href="#fnref1">↩</a></li>
-  </ol>
+  <p id="fn1"><strong>[1]</strong> 本文涉及的国内大厂Token KPI管理措施，来源于2026年6月中国科技媒体的交叉报道，主要来源包括：36氪"多少大厂牛马正在被强迫使用AI？"（2026年6月）、36氪"失控，AI的第一个泡沫，是程序员"（2026年6月）、凤凰网科技"AI写了90%代码，大厂程序员的煎熬时刻"（2026年4月）、南方都市报"叫停Token排名、设定支出上限……巨头开始审视AI账单"（2026年6月8日）。各方报道在关键事实上的相互印证支持了本文的经验描述。 <a href="#fnref1">↩</a></p>
 </div>
 
-<!-- References -->
-<section>
-<h2>参考文献</h2>
+<h2 id="s24">参考文献</h2>
+
 <div class="refs-block">
 <p>Alenezi, M. (2026). Human-AI Collaboration and the Transformation of Software Engineering Work. arXiv: 2606.03394.</p>
 <p>Braverman, H. (1974). <i>Labor and Monopoly Capital: The Degradation of Work in the Twentieth Century</i>. New York: Monthly Review Press.</p>
@@ -466,18 +526,14 @@ graph LR
 <p>Zhang, X. (2026). The transformation from human surplus value to AI algorithmic surplus value: logic of the critique of capital in the era of AI. <i>Humanities and Social Sciences Communications</i>, 13, Article 717.</p>
 <p>Zhang, Y., Cooke, F. L., Ahlstrom, D., &amp; McNeil, N. (2025). The Rise of Algorithmic Management and Implications for Work and Organisations. <i>New Technology, Work and Employment</i>. Advance online publication.</p>
 <p>《学习与实践》(2026). 人工智能时代的劳动价值论重释. 2026年第5期.</p>
-<p>《思想理论战线》(2026). 从机器到算法：人工智能时代"死劳动"对"活劳动"的支配跃迁. 2026年第1期.</p>
+<p>《思想理论战线》(2026). 从机器到算法. 2026年第1期.</p>
 <p>韩文龙、陈其煜、张瑞生 (2025). 人工智能推动劳动过程变革的内在机理与影响研究. 《江西财经大学学报》, 2025年第6期.</p>
 <p>杨天宇 (2026). 资本主义智能化的分配悖论及其替代方案. 中国社会科学院马克思主义研究网, 2026年4月.</p>
-<p>金华、郝其宏、尹洪骁 (2025). 知识技能空心化：人工智能大模型对知识密集型行业劳动过程的重塑——基于马克思劳动过程理论的启示. 《华侨大学学报（哲学社会科学版）》, 2025年第6期, 第13-26页.</p>
+<p>金华、郝其宏、尹洪骁 (2025). 知识技能空心化. 《华侨大学学报（哲学社会科学版）》, 2025年第6期, 第13-26页.</p>
 </div>
-</section>
 
 </article>
-
-<script>
-mermaid.initialize({ startOnLoad: true, theme: 'neutral', securityLevel: 'loose' });
-</script>
-
+</main>
+</div>
 </body>
 </html>
