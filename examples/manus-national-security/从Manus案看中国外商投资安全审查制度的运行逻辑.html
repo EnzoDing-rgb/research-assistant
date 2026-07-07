@@ -144,8 +144,8 @@
     hr { border-color: #999; margin: 24pt 0; }
     .framework-diagram { margin: 16pt 0; page-break-inside: avoid; }
     .framework-diagram svg { max-width: 100%; }
-    /* Force references to new page */
-    #refs { break-before: page; page-break-before: always; margin-top: 50pt; }
+    /* Force refs to new page — WeasyPrint margin workaround */
+    #refs { margin-top: 400pt; }
     strong { color: #000; font-weight: 700; }
     .main { margin-left: 0; margin-right: 0; }
   }
