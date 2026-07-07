@@ -1,9 +1,6 @@
 DRAFT  = research/draft.md
-PDF    = research/paper.pdf
+PDF    = 从Manus案看中国外商投资安全审查制度的运行逻辑.pdf
 HEADER = research/header.tex
-
-# 依赖: pandoc + texlive-xetex + texlive-lang-chinese
-# Ubuntu: sudo apt install pandoc texlive-xetex texlive-lang-chinese
 
 .PHONY: pdf clean
 
@@ -14,10 +11,7 @@ $(PDF): $(DRAFT) $(HEADER)
 		--pdf-engine=xelatex \
 		-H "$(HEADER)" \
 		-V documentclass=article \
-		-V geometry:margin=2.5cm \
-		-V fontsize=12pt \
-		--toc \
-		--number-sections
+		-V fontsize=12pt
 
 clean:
-	rm -f "$(PDF)"
+	rm -f "$(PDF)" research/paper.pdf
