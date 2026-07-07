@@ -11,7 +11,7 @@ $(PDF): $(DRAFT) $(HEADER)
 		--pdf-engine=xelatex \
 		-H "$(HEADER)" \
 		-V documentclass=article \
-		-V fontsize=20pt
+		-V fontsize=28pt
 
 clean:
 	rm -f "$(PDF)" research/paper.pdf
