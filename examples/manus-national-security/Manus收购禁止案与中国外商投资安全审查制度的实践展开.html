@@ -143,8 +143,9 @@
     a { color: #000; text-decoration: none; }
     hr { border-color: #999; margin: 24pt 0; }
     .framework-diagram { margin: 16pt 0; page-break-inside: avoid; }
-    .page-break { page-break-before: always; }
     .framework-diagram svg { max-width: 100%; }
+    /* Force references to new page (margin workaround for weasyprint page-break bug) */
+    #refs { margin-top: 200pt; }
     strong { color: #000; font-weight: 700; }
     .main { margin-left: 0; margin-right: 0; }
   }
@@ -250,7 +251,7 @@
 <p>第二阶段的分析表明，审查制度通过《安审办法》第 2 条的"间接投资"条款和反规避规范逻辑，建立了一种"实质关联判断逻辑"——不依赖注册地，通过技术来源、人才来源、数据来源三个维度综合判断交易是否仍与中国国家安全存在无法切断的实质联系。这一标准在功能层面与主要经济体外资安审制度中的反规避逻辑趋同。</p>
 <p>第三阶段的分析表明，禁止决定具有可溯及的撤销效力，且该决定为"最终决定"。Manus 案表明这套制度在科技领域具备了被实际调用的能力，但它尚不足以证明制度已进入"常态化运行"——能力的验证和频率的确证是两个需要区分的问题。</p>
 <p>在方法论层面，本文的分析受限于审查决定文书的未公开——对审查机关内部事实认定和法律推理的还原带有不可避免的"反向推演"性质，其结论的可靠性取决于现有公开信息的完整程度。后续案例的积累将为验证和修正本文提出的分析框架提供必要的经验素材。</p>
-<h2 class="page-break">参考文献</h2>
+<h2 id="refs">参考文献</h2>
 <p>- 《中华人民共和国国家安全法》（2015 年）第 59 条</p>
 <p>- 《中华人民共和国外商投资法》（2019 年）第 35 条</p>
 <p>- 《外商投资安全审查办法》（国家发展改革委、商务部令第 37 号，2021 年施行）第 2、4、9、12、18 条</p>
